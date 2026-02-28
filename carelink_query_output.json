@@ -6,9 +6,9 @@
   },
   "retrieved_experiences": [
     {
-      "id": "71f6fdbf-0510-4e70-8a2f-9780b4e746be",
-      "user_id": "9e819ca4-5606-492e-a835-bafad8f71eb3",
-      "doctor_id": "a38fd864-a6b3-4925-9404-f246a60b3257",
+      "id": "a8168492-0457-4a1e-b474-9b2d18130679",
+      "user_id": "eff63a7a-3d3c-4c57-87b9-ac796c0d925e",
+      "doctor_id": "46690b03-9d02-4922-9aa2-1b84dfbbf82c",
       "doctor_name": "Dr. Priya Nair",
       "doctor_specialty": "Radiation Oncology",
       "doctor_hospital": "Cleveland Clinic",
@@ -28,9 +28,9 @@
       "raw_text": "I was diagnosed with Breast Cancer (Stage II) and underwent Chemotherapy. Recovery took 174 days. Side effects included hot_flashes, weight_changes."
     },
     {
-      "id": "292de8ef-ecbd-484a-bee1-366527114063",
-      "user_id": "d9d13709-7104-4119-8325-f6537fce8137",
-      "doctor_id": "334a8603-c802-49a3-81c3-673e828781d4",
+      "id": "7ba9444a-5be3-43f0-a443-dad24e62dbf7",
+      "user_id": "7cb5c66b-4e39-4aac-bdeb-e4f768bcaa27",
+      "doctor_id": "88754e53-7e8b-4d12-8ef9-2c84c8c5e674",
       "doctor_name": "Dr. Sarah Chen",
       "doctor_specialty": "Oncology",
       "doctor_hospital": "Mayo Clinic",
@@ -50,9 +50,9 @@
       "raw_text": "I was diagnosed with Breast Cancer (Stage II) and underwent Chemotherapy. Recovery took 393 days. Side effects included nausea, hot_flashes."
     },
     {
-      "id": "e340f127-c1a7-40b8-91d2-18e5b41eb0de",
-      "user_id": "28a41dd8-df90-47cb-a7f2-5be24a567a40",
-      "doctor_id": "7bc6b916-5bf4-4ac0-88d5-d50870ec5706",
+      "id": "ab7effd6-0918-4aed-8a52-fc03321e97c2",
+      "user_id": "f6b807b9-d510-4cc7-9d89-a324e28d5c7b",
+      "doctor_id": "ff5ee2fa-6924-48d9-8fb9-a625899ddb3d",
       "doctor_name": "Dr. Marcus Webb",
       "doctor_specialty": "Surgical Oncology",
       "doctor_hospital": "Johns Hopkins Hospital",
@@ -72,9 +72,9 @@
       "raw_text": "I was diagnosed with Breast Cancer (Stage II) and underwent Radiation. Recovery took 352 days. Side effects included hair_loss, nausea."
     },
     {
-      "id": "569eec96-a329-49c0-8e3f-a35ed7b1c3d3",
-      "user_id": "af65a826-c01a-44be-9bdf-d7f8b38d8782",
-      "doctor_id": "334a8603-c802-49a3-81c3-673e828781d4",
+      "id": "eb269855-e89c-4d1c-80d1-56086297edf0",
+      "user_id": "1554cd61-34e0-4798-9bc1-27ad2833f2bd",
+      "doctor_id": "88754e53-7e8b-4d12-8ef9-2c84c8c5e674",
       "doctor_name": "Dr. Sarah Chen",
       "doctor_specialty": "Oncology",
       "doctor_hospital": "Mayo Clinic",
@@ -94,9 +94,9 @@
       "raw_text": "I was diagnosed with Breast Cancer (Stage II) and underwent Surgery. Recovery took 208 days. Side effects included fatigue, hot_flashes."
     },
     {
-      "id": "5f6b3c0c-541b-4ac1-b44c-f4cb55fba0bb",
-      "user_id": "a02af3f4-a01c-4f48-9f17-7d098eaf2438",
-      "doctor_id": "7bc6b916-5bf4-4ac0-88d5-d50870ec5706",
+      "id": "d2653a68-5f4a-4ccd-bac2-df8a754797d3",
+      "user_id": "a7258372-2957-4d39-a070-1c39371837f8",
+      "doctor_id": "ff5ee2fa-6924-48d9-8fb9-a625899ddb3d",
       "doctor_name": "Dr. Marcus Webb",
       "doctor_specialty": "Surgical Oncology",
       "doctor_hospital": "Johns Hopkins Hospital",
@@ -118,7 +118,7 @@
   ],
   "doctor_recommendations": [
     {
-      "doctor_id": "7bc6b916-5bf4-4ac0-88d5-d50870ec5706",
+      "doctor_id": "ff5ee2fa-6924-48d9-8fb9-a625899ddb3d",
       "doctor_name": "Dr. Marcus Webb",
       "doctor_specialty": "Surgical Oncology",
       "doctor_hospital": "Johns Hopkins Hospital",
@@ -131,7 +131,7 @@
       "composite_score": 0.8367
     },
     {
-      "doctor_id": "a38fd864-a6b3-4925-9404-f246a60b3257",
+      "doctor_id": "46690b03-9d02-4922-9aa2-1b84dfbbf82c",
       "doctor_name": "Dr. Priya Nair",
       "doctor_specialty": "Radiation Oncology",
       "doctor_hospital": "Cleveland Clinic",
@@ -144,7 +144,7 @@
       "composite_score": 0.6963
     },
     {
-      "doctor_id": "334a8603-c802-49a3-81c3-673e828781d4",
+      "doctor_id": "88754e53-7e8b-4d12-8ef9-2c84c8c5e674",
       "doctor_name": "Dr. Sarah Chen",
       "doctor_specialty": "Oncology",
       "doctor_hospital": "Mayo Clinic",

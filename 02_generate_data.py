@@ -155,27 +155,19 @@ DOCTOR_NAMES = [
 
 # ── Embedding simulation ──────────────────────────────────────────────────────
 
-def simulate_embedding(text: str, dim: int = 768) -> list:
-    """
-    Deterministic, unit-normalized 768-dim vector seeded from text content.
+import google.generativeai as genai
+import os
 
-    ── Production replacement (Gemini API) ─────────────────────────────────
-    import google.generativeai as genai, numpy as np, os
-    genai.configure(api_key=os.environ["GEMINI_API_KEY"])
+genai.configure(api_key=os.environ["GEMINI_API_KEY"])
+
+def simulate_embedding(text: str, dim: int = 768) -> list:
     res = genai.embed_content(
-        model="models/text-embedding-004",
+        model="models/gemini-embedding-001",
         content=text,
-        task_type="RETRIEVAL_DOCUMENT",   # use RETRIEVAL_QUERY for searches
+        task_type="RETRIEVAL_DOCUMENT",
     )
     vec = np.array(res["embedding"], dtype=np.float32)
     return (vec / np.linalg.norm(vec)).tolist()
-    ────────────────────────────────────────────────────────────────────────
-    """
-    seed = sum(ord(c) for c in text[:80]) % (2 ** 31)
-    rng  = np.random.default_rng(seed)
-    vec  = rng.standard_normal(dim).astype(np.float32)
-    vec /= np.linalg.norm(vec)
-    return vec.tolist()
 
 
 # ── Narrative helpers ─────────────────────────────────────────────────────────
@@ -293,6 +285,9 @@ def generate_experiences(doctors: list, n: int = 60) -> list:
             "id":                    str(uuid.uuid4()),
             "user_id":               str(uuid.uuid4()),
             "doctor_id":             doctor["id"],
+            "doctor_name":           doctor["name"],
+            "doctor_specialty":      doctor["specialty"],
+            "doctor_hospital":       doctor["hospital"],
             "raw_text":              raw_text,
             "condition":             condition,
             "stage":                 stage,

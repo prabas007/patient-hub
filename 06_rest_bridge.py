@@ -175,7 +175,16 @@ async def batch_upsert(req: BatchUpsertRequest):
 async def search(req: SearchRequest):
     try:
         results = await _client.search(req.collection, req.query, top_k=req.top_k)
-        return {"hits": _hits_to_json(results)}
+        hits = []
+        for r in results:
+            payload = {}
+            try:
+                vector, payload_data = await _client.get(req.collection, r.id)
+                payload = dict(payload_data) if payload_data else {}
+            except Exception:
+                pass
+            hits.append({"id": r.id, "score": float(r.score), "payload": payload})
+        return {"hits": hits}
     except Exception as exc:
         raise HTTPException(status_code=500, detail=str(exc))
 
@@ -183,11 +192,20 @@ async def search(req: SearchRequest):
 @app.post("/search_filtered", response_model=Dict[str, Any])
 async def search_filtered(req: FilteredSearchRequest):
     try:
-        f       = _build_filter(req.filters)
+        f = _build_filter(req.filters)
         results = await _client.search_filtered(
             req.collection, req.query, f, top_k=req.top_k
         )
-        return {"hits": _hits_to_json(results)}
+        hits = []
+        for r in results:
+            payload = {}
+            try:
+                vector, payload_data = await _client.get(req.collection, r.id)
+                payload = dict(payload_data) if payload_data else {}
+            except Exception:
+                pass
+            hits.append({"id": r.id, "score": float(r.score), "payload": payload})
+        return {"hits": hits}
     except Exception as exc:
         raise HTTPException(status_code=500, detail=str(exc))
 
