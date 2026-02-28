@@ -5,8 +5,9 @@ import { usePathname } from "next/navigation"
 import type { ReactNode } from "react"
 
 const TABS = [
-  { name: "Doctor Recommender", href: "/dashboard/doctor" },
-  { name: "Care Circle",        href: "/dashboard/circle"  },
+  { name: "Chat",               href: "/dashboard/chat"     },
+  { name: "Doctor Recommender", href: "/dashboard/doctor"   },
+  { name: "Care Circle",        href: "/dashboard/circle"   },
   { name: "Resources",          href: "/dashboard/resources"},
 ]
 

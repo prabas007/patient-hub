@@ -49,6 +49,14 @@ export interface ChatMessage {
   isGuardrail?: boolean
 }
 
+export interface PersonalConversation {
+  id: string
+  friendId: string
+  friendName: string
+  friendInitials: string
+  messages: ChatMessage[]
+}
+
 // ─── Mock Doctors ─────────────────────────────────────────────────────────────
 
 export const MOCK_DOCTORS: Doctor[] = [
@@ -385,5 +393,138 @@ export const MOCK_CHAT_MESSAGES: ChatMessage[] = [
     authorName: "Thomas K.",
     text: "Welcome Sofia! You're not alone here. We all get it.",
     timestamp: "2026-02-27T09:16:00Z",
+  },
+]
+
+// ─── Mock Personal Circle Members ─────────────────────────────────────────────
+
+export const MOCK_PERSONAL_MEMBERS: CircleMember[] = [
+  {
+    id: "personal-1",
+    initials: "RK",
+    name: "Rachel K.",
+    condition: "Coronary Artery Disease",
+    stage: "Stage 2 Recovery",
+    joinedDaysAgo: 12,
+    milestones: [
+      {
+        id: "pm1-1",
+        title: "Connected on LINK-CARE",
+        description: "Started sharing recovery journey together.",
+        completedAt: "2026-02-16T10:00:00Z",
+        daysFromDiagnosis: 0,
+      },
+    ],
+  },
+  {
+    id: "personal-2",
+    initials: "AC",
+    name: "Alex C.",
+    condition: "Heart Failure (HFrEF)",
+    stage: "Stage 1 Management",
+    joinedDaysAgo: 7,
+    milestones: [],
+  },
+  {
+    id: "personal-3",
+    initials: "LH",
+    name: "Lisa H.",
+    condition: "Post-MI Recovery",
+    stage: "Stage 3 Recovery",
+    joinedDaysAgo: 20,
+    milestones: [
+      {
+        id: "pm3-1",
+        title: "Completed Cardiac Rehab",
+        description: "Finished 12-week supervised rehabilitation program.",
+        completedAt: "2026-01-15T10:00:00Z",
+        daysFromDiagnosis: 90,
+      },
+    ],
+  },
+]
+
+// ─── Mock Personal Conversations ──────────────────────────────────────────────
+
+export const MOCK_PERSONAL_CONVERSATIONS: PersonalConversation[] = [
+  {
+    id: "conv-1",
+    friendId: "personal-1",
+    friendName: "Rachel K.",
+    friendInitials: "RK",
+    messages: [
+      {
+        id: "pc1-1",
+        authorId: "personal-1",
+        authorName: "Rachel K.",
+        text: "Hey! Saw we were matched in the same Stage 2 cohort. How are you finding the recovery process?",
+        timestamp: "2026-02-26T14:00:00Z",
+      },
+      {
+        id: "pc1-2",
+        authorId: "me",
+        authorName: "You",
+        text: "Hi Rachel! Yes, it's been a journey. The diet changes have been the hardest part honestly.",
+        timestamp: "2026-02-26T14:05:00Z",
+      },
+      {
+        id: "pc1-3",
+        authorId: "personal-1",
+        authorName: "Rachel K.",
+        text: "Completely understand. I've been working with a nutritionist which has helped a lot. Have you tried the Mediterranean diet approach?",
+        timestamp: "2026-02-26T14:10:00Z",
+      },
+    ],
+  },
+  {
+    id: "conv-2",
+    friendId: "personal-2",
+    friendName: "Alex C.",
+    friendInitials: "AC",
+    messages: [
+      {
+        id: "pc2-1",
+        authorId: "me",
+        authorName: "You",
+        text: "Hey Alex, wanted to check in. How did your appointment go yesterday?",
+        timestamp: "2026-02-27T10:00:00Z",
+      },
+      {
+        id: "pc2-2",
+        authorId: "personal-2",
+        authorName: "Alex C.",
+        text: "It went well! Doctor said my EF is improving. Slowly but surely.",
+        timestamp: "2026-02-27T10:30:00Z",
+      },
+    ],
+  },
+  {
+    id: "conv-3",
+    friendId: "personal-3",
+    friendName: "Lisa H.",
+    friendInitials: "LH",
+    messages: [
+      {
+        id: "pc3-1",
+        authorId: "personal-3",
+        authorName: "Lisa H.",
+        text: "Just finished my 12-week cardiac rehab program! Feeling so much stronger.",
+        timestamp: "2026-02-25T09:00:00Z",
+      },
+      {
+        id: "pc3-2",
+        authorId: "me",
+        authorName: "You",
+        text: "That's amazing Lisa! Congrats on hitting that milestone!",
+        timestamp: "2026-02-25T09:15:00Z",
+      },
+      {
+        id: "pc3-3",
+        authorId: "personal-3",
+        authorName: "Lisa H.",
+        text: "Thank you! It wasn't easy but so worth it. Keep going, you've got this!",
+        timestamp: "2026-02-25T09:20:00Z",
+      },
+    ],
   },
 ]
