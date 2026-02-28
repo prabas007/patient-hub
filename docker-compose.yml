@@ -1,0 +1,53 @@
+# CareLink — docker-compose.yml
+# ────────────────────────────────────────────────────────────────────────────
+# Brings up:
+#   1. vectoraidb   — Actian VectorAI DB (gRPC on 50051)
+#   2. carelink-bridge — Python REST bridge (HTTP on 8080) for Node.js callers
+#
+# Prerequisite: Load the DB image first
+#   docker image load -i Actian_VectorAI_DB_Beta.tar
+#
+# Usage:
+#   docker compose up -d
+#   docker compose logs -f carelink-bridge
+#   docker compose down
+# ────────────────────────────────────────────────────────────────────────────
+
+version: "3.9"
+
+services:
+
+  # ── Actian VectorAI DB ─────────────────────────────────────────────────────
+  vectoraidb:
+    image:          localhost/actian/vectoraidb:1.0b
+    container_name: vectoraidb
+    ports:
+      - "50051:50051"
+    volumes:
+      - ./data:/data          # persists collections + vde.log
+    restart:        unless-stopped
+    stop_grace_period: 2m
+    healthcheck:
+      test:         ["CMD-SHELL", "python -c \"from cortex import CortexClient; CortexClient('localhost:50051').health_check()\""]
+      interval:     15s
+      timeout:      5s
+      retries:      5
+
+  # ── CareLink REST Bridge (Python → gRPC proxy for Node.js) ────────────────
+  carelink-bridge:
+    build:
+      context:    .
+      dockerfile: Dockerfile.bridge
+    container_name: carelink-bridge
+    environment:
+      VECTORAI_HOST: "vectoraidb:50051"
+      BRIDGE_PORT:   "8080"
+    ports:
+      - "8080:8080"
+    depends_on:
+      vectoraidb:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  data: {}

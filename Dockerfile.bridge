@@ -1,0 +1,24 @@
+# Dockerfile.bridge
+# ──────────────────────────────────────────────────────────────────────────────
+# Builds the CareLink Python REST bridge that proxies HTTP → Actian VectorAI gRPC.
+# ──────────────────────────────────────────────────────────────────────────────
+
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Copy the actiancortex wheel from the cloned repo root
+COPY actiancortex-0.1.0b1-py3-none-any.whl .
+
+# Install dependencies
+RUN pip install --no-cache-dir \
+    fastapi==0.111.0 \
+    uvicorn[standard]==0.30.1 \
+    ./actiancortex-0.1.0b1-py3-none-any.whl
+
+# Copy bridge script
+COPY 06_rest_bridge.py .
+
+EXPOSE 8080
+
+CMD ["uvicorn", "06_rest_bridge:app", "--host", "0.0.0.0", "--port", "8080"]

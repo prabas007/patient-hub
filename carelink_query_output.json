@@ -1,0 +1,166 @@
+{
+  "query": {
+    "text": "I am a patient recently diagnosed with Breast Cancer, Stage II. I am looking for treatment experiences and doctor recommendations.",
+    "condition": "Breast Cancer",
+    "stage": "Stage II"
+  },
+  "retrieved_experiences": [
+    {
+      "id": "1ad47034-66ac-4b88-98b8-248e0a563119",
+      "user_id": "97bf3a5f-cf7f-418b-8d17-30c59249c66d",
+      "doctor_id": "ebc8a7b6-4b79-4130-998c-d4ddfbde0a9c",
+      "doctor_name": "Dr. Priya Nair",
+      "doctor_specialty": "Radiation Oncology",
+      "doctor_hospital": "Cleveland Clinic",
+      "condition": "Breast Cancer",
+      "stage": "Stage II",
+      "treatment_type": "Chemotherapy",
+      "age_range": "25-34",
+      "location_region": "Northeast US",
+      "recovery_days": 174,
+      "sentiment_score": -0.015,
+      "side_effect_tags": [
+        "hot_flashes",
+        "lymphedema"
+      ],
+      "outcome_success_score": 0.481,
+      "similarity_score": 0.9543,
+      "raw_text": "I was diagnosed with Breast Cancer (Stage II) and underwent Chemotherapy. Recovery took 174 days. Side effects included hot_flashes,lymphedema. My care team at Cleveland Clinic was outstanding throughout the process."
+    },
+    {
+      "id": "f573a2d8-d83d-4fa3-ac24-5c435e5c1f91",
+      "user_id": "2caa9bc0-1c97-4f31-a1ca-bd512fb1eff0",
+      "doctor_id": "c98d9272-94ad-4e90-ac52-7eef87520d76",
+      "doctor_name": "Dr. Marcus Webb",
+      "doctor_specialty": "Surgical Oncology",
+      "doctor_hospital": "Johns Hopkins Hospital",
+      "condition": "Breast Cancer",
+      "stage": "Stage II",
+      "treatment_type": "Radiation",
+      "age_range": "35-44",
+      "location_region": "Northeast US",
+      "recovery_days": 352,
+      "sentiment_score": 0.393,
+      "side_effect_tags": [
+        "hair_loss",
+        "nausea"
+      ],
+      "outcome_success_score": 0.805,
+      "similarity_score": 0.8686,
+      "raw_text": "I was diagnosed with Breast Cancer (Stage II) and underwent Radiation. Recovery took 352 days. Side effects included hair_loss,nausea. My care team at Johns Hopkins Hospital was outstanding throughout the process."
+    },
+    {
+      "id": "15e3e0d4-000b-4aed-a2f1-667791456a9e",
+      "user_id": "1793a269-2e77-4bd8-b3d3-e3309b7e7577",
+      "doctor_id": "a5befcab-1cd7-4474-8015-d0e0cf7d5612",
+      "doctor_name": "Dr. Sarah Chen",
+      "doctor_specialty": "Oncology",
+      "doctor_hospital": "Mayo Clinic",
+      "condition": "Breast Cancer",
+      "stage": "Stage II",
+      "treatment_type": "Chemotherapy",
+      "age_range": "35-44",
+      "location_region": "West Coast US",
+      "recovery_days": 393,
+      "sentiment_score": 0.105,
+      "side_effect_tags": [
+        "nausea",
+        "hot_flashes"
+      ],
+      "outcome_success_score": 0.618,
+      "similarity_score": 0.8599,
+      "raw_text": "I was diagnosed with Breast Cancer (Stage II) and underwent Chemotherapy. Recovery took 393 days. Side effects included nausea,hot_flashes. My care team at Mayo Clinic was outstanding throughout the process."
+    },
+    {
+      "id": "5cb443e1-8610-4ede-b19a-ae4688d124f2",
+      "user_id": "c689c45d-a1e8-4811-982f-572c51b46286",
+      "doctor_id": "a5befcab-1cd7-4474-8015-d0e0cf7d5612",
+      "doctor_name": "Dr. Sarah Chen",
+      "doctor_specialty": "Oncology",
+      "doctor_hospital": "Mayo Clinic",
+      "condition": "Breast Cancer",
+      "stage": "Stage II",
+      "treatment_type": "Surgery",
+      "age_range": "35-44",
+      "location_region": "West Coast US",
+      "recovery_days": 208,
+      "sentiment_score": 0.044,
+      "side_effect_tags": [
+        "fatigue",
+        "hot_flashes"
+      ],
+      "outcome_success_score": 0.474,
+      "similarity_score": 0.8545,
+      "raw_text": "I was diagnosed with Breast Cancer (Stage II) and underwent Surgery. Recovery took 208 days. Side effects included fatigue,hot_flashes. My care team at Mayo Clinic was outstanding throughout the process."
+    },
+    {
+      "id": "2e39a85b-fa33-4a32-8d88-dd937429a0cc",
+      "user_id": "c0637a24-b1a3-43e8-bf42-d1d945f81ad2",
+      "doctor_id": "c98d9272-94ad-4e90-ac52-7eef87520d76",
+      "doctor_name": "Dr. Marcus Webb",
+      "doctor_specialty": "Surgical Oncology",
+      "doctor_hospital": "Johns Hopkins Hospital",
+      "condition": "Breast Cancer",
+      "stage": "Stage II",
+      "treatment_type": "Surgery",
+      "age_range": "45-54",
+      "location_region": "Northeast US",
+      "recovery_days": 104,
+      "sentiment_score": 0.608,
+      "side_effect_tags": [
+        "neuropathy",
+        "nausea"
+      ],
+      "outcome_success_score": 0.923,
+      "similarity_score": 0.8523,
+      "raw_text": "I was diagnosed with Breast Cancer (Stage II) and underwent Surgery. Recovery took 104 days. Side effects included neuropathy,nausea. My care team at Johns Hopkins Hospital was outstanding throughout the process."
+    }
+  ],
+  "doctor_recommendations": [
+    {
+      "doctor_id": "c98d9272-94ad-4e90-ac52-7eef87520d76",
+      "doctor_name": "Dr. Marcus Webb",
+      "doctor_specialty": "Surgical Oncology",
+      "doctor_hospital": "Johns Hopkins Hospital",
+      "supporting_experiences": 2,
+      "avg_similarity_score": 0.8604,
+      "avg_outcome_score": 0.864,
+      "avg_sentiment_score": 0.5005,
+      "avg_recovery_days": 228.0,
+      "composite_score": 0.8397
+    },
+    {
+      "doctor_id": "ebc8a7b6-4b79-4130-998c-d4ddfbde0a9c",
+      "doctor_name": "Dr. Priya Nair",
+      "doctor_specialty": "Radiation Oncology",
+      "doctor_hospital": "Cleveland Clinic",
+      "supporting_experiences": 1,
+      "avg_similarity_score": 0.9543,
+      "avg_outcome_score": 0.481,
+      "avg_sentiment_score": -0.015,
+      "avg_recovery_days": 174.0,
+      "composite_score": 0.6963
+    },
+    {
+      "doctor_id": "a5befcab-1cd7-4474-8015-d0e0cf7d5612",
+      "doctor_name": "Dr. Sarah Chen",
+      "doctor_specialty": "Oncology",
+      "doctor_hospital": "Mayo Clinic",
+      "supporting_experiences": 2,
+      "avg_similarity_score": 0.8572,
+      "avg_outcome_score": 0.546,
+      "avg_sentiment_score": 0.0745,
+      "avg_recovery_days": 300.5,
+      "composite_score": 0.6843
+    }
+  ],
+  "rag_context": "[Experience 1]  Condition: Breast Cancer | Stage: Stage II | Treatment: Chemotherapy | Recovery: 174 days | Outcome score: 0.48 | Sentiment: -0.01 | Side effects: hot_flashes,lymphedema | Similarity: 0.9543\n   Patient account: \"I was diagnosed with Breast Cancer (Stage II) and underwent Chemotherapy. Recovery took 174 days. Side effects included hot_flashes,lymphedema. My care team at Cleveland Clinic was outstanding throughout the process.\"\n\n[Experience 2]  Condition: Breast Cancer | Stage: Stage II | Treatment: Radiation | Recovery: 352 days | Outcome score: 0.81 | Sentiment: +0.39 | Side effects: hair_loss,nausea | Similarity: 0.8686\n   Patient account: \"I was diagnosed with Breast Cancer (Stage II) and underwent Radiation. Recovery took 352 days. Side effects included hair_loss,nausea. My care team at Johns Hopkins Hospital was outstanding throughout the process.\"\n\n[Experience 3]  Condition: Breast Cancer | Stage: Stage II | Treatment: Chemotherapy | Recovery: 393 days | Outcome score: 0.62 | Sentiment: +0.10 | Side effects: nausea,hot_flashes | Similarity: 0.8599\n   Patient account: \"I was diagnosed with Breast Cancer (Stage II) and underwent Chemotherapy. Recovery took 393 days. Side effects included nausea,hot_flashes. My care team at Mayo Clinic was outstanding throughout the process.\"\n\n[Experience 4]  Condition: Breast Cancer | Stage: Stage II | Treatment: Surgery | Recovery: 208 days | Outcome score: 0.47 | Sentiment: +0.04 | Side effects: fatigue,hot_flashes | Similarity: 0.8545\n   Patient account: \"I was diagnosed with Breast Cancer (Stage II) and underwent Surgery. Recovery took 208 days. Side effects included fatigue,hot_flashes. My care team at Mayo Clinic was outstanding throughout the process.\"\n\n[Experience 5]  Condition: Breast Cancer | Stage: Stage II | Treatment: Surgery | Recovery: 104 days | Outcome score: 0.92 | Sentiment: +0.61 | Side effects: neuropathy,nausea | Similarity: 0.8523\n   Patient account: \"I was diagnosed with Breast Cancer (Stage II) and underwent Surgery. Recovery took 104 days. Side effects included neuropathy,nausea. My care team at Johns Hopkins Hospital was outstanding throughout the process.\"",
+  "metadata": {
+    "total_experiences_retrieved": 5,
+    "total_doctors_surfaced": 3,
+    "retrieval_model": "text-embedding-004",
+    "similarity_metric": "cosine",
+    "index_type": "HNSW",
+    "source": "OFFLINE_DEMO \u2014 synthetic data, no DB connection required"
+  }
+}
