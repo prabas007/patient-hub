@@ -17,7 +17,7 @@ export function DoctorCard({ doctor, index = 0 }: DoctorCardProps) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.1, duration: 0.4, ease: "easeOut" }}
     >
-      <Link href={`/dashboard/doctor/${doctor.id}`}>
+      <Link href={`/dashboard/doctor/${doctor.id}?name=${encodeURIComponent(doctor.name)}&specialty=${encodeURIComponent(doctor.specialty)}&hospital=${encodeURIComponent(doctor.hospital)}&matchScore=${doctor.matchScore}&patientCount=${doctor.patientCount}`}>
         <div className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl
                         transition-all duration-200 cursor-pointer group
                         border border-transparent hover:border-blue-100">
