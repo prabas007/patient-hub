@@ -1,0 +1,34 @@
+import Link from "next/link"
+
+export default function ResourcesPage() {
+  return (
+    <div>
+      <h2 className="text-3xl font-bold text-gray-900 mb-4">
+        Resources
+      </h2>
+
+      <p className="text-gray-600 mb-8 max-w-2xl">
+        Trusted educational resources and AI-curated treatment guidance.
+      </p>
+
+      {/* Guidelines Card */}
+      <Link href="/dashboard/resources/guidelines">
+        <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-6 shadow-sm hover:shadow-md transition cursor-pointer">
+          <h3 className="text-lg font-semibold text-yellow-800 mb-2">
+            Guidelines & Responsible Use
+          </h3>
+          <p className="text-sm text-yellow-700">
+            Learn how to use LINK-CARE safely and responsibly.
+          </p>
+        </div>
+      </Link>
+
+      {/* Placeholder Content */}
+      <div className="mt-6 bg-gray-50 rounded-xl p-6 shadow-sm">
+        <p className="text-gray-700">
+          Personalized educational materials will appear here.
+        </p>
+      </div>
+    </div>
+  )
+}
