@@ -10,6 +10,12 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  /* Confidence meter colors */
+  --color-meter-green: #16a34a;
+  --color-meter-yellow: #ca8a04;
+  --color-meter-orange: #ea580c;
+  --color-meter-red: #dc2626;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -23,4 +29,64 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* ─── Emotional State System ──────────────────────────────────────────────── */
+
+[data-emotion="calm"] {
+  --content-padding: 2.5rem;
+  --card-gap: 1.5rem;
+  --base-font-size: 1rem;
+  --heading-size: 1.875rem;
+}
+
+[data-emotion="focused"] {
+  --content-padding: 1.5rem;
+  --card-gap: 0.75rem;
+  --base-font-size: 0.9rem;
+  --heading-size: 1.5rem;
+}
+
+[data-emotion="anxious"] {
+  --content-padding: 3rem;
+  --card-gap: 2rem;
+  --base-font-size: 1rem;
+  --heading-size: 1.875rem;
+}
+
+[data-emotion="overwhelmed"] {
+  --content-padding: 4rem;
+  --card-gap: 2.5rem;
+  --base-font-size: 1.125rem;
+  --heading-size: 2.25rem;
+}
+
+/* Calm: soft blue-tinted background */
+[data-emotion="calm"] main {
+  background-color: #f8fafc;
+}
+
+/* Focused: higher contrast, slightly smaller main card padding */
+[data-emotion="focused"] main > div {
+  padding: 2rem;
+}
+
+/* Anxious: warm tint to reduce harshness */
+[data-emotion="anxious"] {
+  background-color: #fffbf5;
+}
+
+/* Overwhelmed: hide search bar to reduce cognitive load, extra whitespace */
+[data-emotion="overwhelmed"] .search-bar-container {
+  display: none;
+}
+
+[data-emotion="overwhelmed"] main > div {
+  padding: 4rem;
+}
+
+/* ─── Confidence Meter ────────────────────────────────────────────────────── */
+
+.confidence-bar {
+  transition: width 0.7s cubic-bezier(0.4, 0, 0.2, 1);
 }
