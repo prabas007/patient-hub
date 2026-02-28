@@ -78,7 +78,7 @@ def insert_doctors(client: CortexClient, doctors: list, batch_size: int) -> int:
         payloads = [_strip_embedding(r) for r in recs]
 
         client.batch_upsert(
-            collection = "doctor_profiles",
+            collection_name = "doctor_profiles",
             ids        = ids,
             vectors    = vectors,
             payloads   = payloads,
@@ -105,7 +105,7 @@ def insert_experiences(client: CortexClient, experiences: list, batch_size: int)
         payloads = [_strip_embedding(r) for r in recs]
 
         client.batch_upsert(
-            collection = "patient_experiences",
+            collection_name = "patient_experiences",
             ids        = ids,
             vectors    = vectors,
             payloads   = payloads,
@@ -131,7 +131,7 @@ def insert_circle_posts(client: CortexClient, posts: list, batch_size: int) -> i
         payloads = [_strip_embedding(r) for r in recs]
 
         client.batch_upsert(
-            collection = "circle_posts",
+            collection_name = "circle_posts",
             ids        = ids,
             vectors    = vectors,
             payloads   = payloads,
