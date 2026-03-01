@@ -12,10 +12,10 @@ export function RecoveryChart({ data }: RecoveryChartProps) {
         return (
           <div key={point.month} className="flex flex-col items-center gap-1 flex-1">
             <span className="text-xs text-gray-500 font-medium">{point.successRate}%</span>
-            <div className="w-full bg-gray-100 rounded-t-lg relative flex-1">
+            <div className="w-full bg-gray-100 rounded-t-lg relative" style={{ height: "80px" }}>
               <div
-                className="absolute bottom-0 w-full bg-blue-500 rounded-t-lg transition-all duration-700"
-                style={{ height: `${heightPercent}%` }}
+                className="absolute bottom-0 w-full rounded-t-lg transition-all duration-700"
+                style={{ height: `${heightPercent}%`, backgroundColor: "#3b82f6" }}
               />
             </div>
             <span className="text-xs text-gray-400">{point.month}</span>
