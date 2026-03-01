@@ -43,7 +43,7 @@ CareLink helps patients navigate serious medical diagnoses by surfacing real pat
 ## Features
 
 - **Semantic Doctor Recommendations** — Patients describe their condition in natural language or by voice; the system retrieves the most similar patient experiences from VectorAI and surfaces ranked doctor recommendations using a composite score (similarity × outcome × sentiment).
-- **Multi-Agent Consensus Engine** — Three AI specialist personas (Clinical Specialist 🩺, Patient Advocate 🤝, Data Scientist 📊) independently analyze the same data in parallel via `asyncio.gather`, then vote to produce a consensus recommendation with a confidence score.
+- **Multi-Agent Consensus Engine** — Three AI specialist personas (Clinical Specialist, Patient Advocate, Data Scientist) independently analyze the same data in parallel via `asyncio.gather`, then vote to produce a consensus recommendation with a confidence score.
 - **Voice Input via Whisper** — Patients can speak their query; audio is recorded as WebM, re-muxed to WAV via ffmpeg, and transcribed by Whisper on a Modal T4 GPU.
 - **Emotional State Awareness** — The consensus engine accepts an `esi_category` (emotional state indicator) to tailor recommendations to how the patient is feeling.
 - **Community Circles** — A vector collection for condition-specific community posts, searchable by semantic similarity.
@@ -216,7 +216,6 @@ The bridge (`06_rest_bridge.py`) exposes VectorAI's gRPC interface over HTTP so 
     {
       "role": "clinical_specialist",
       "label": "Clinical Specialist",
-      "icon": "🩺",
       "top_doctor": "Dr. Sarah Chen",
       "confidence": 87,
       "verdict": "...",
