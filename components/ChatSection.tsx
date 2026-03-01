@@ -55,7 +55,7 @@ export function ChatSection() {
 
   return (
     <div className="mt-8">
-      <h3 className="font-semibold text-gray-900 mb-3">Circle Chat</h3>
+      <h3 className="font-semibold text-stone-900 mb-3">Circle Chat</h3>
 
       {/* Disclaimer bar */}
       <div className="bg-yellow-50 border border-yellow-200 rounded-xl px-4 py-3 mb-4 flex items-start gap-2">
@@ -67,7 +67,7 @@ export function ChatSection() {
       </div>
 
       {/* Message list */}
-      <div className="bg-gray-50 rounded-2xl p-4 h-80 overflow-y-auto space-y-3 mb-4">
+      <div className="bg-stone-50 rounded-2xl p-4 h-80 overflow-y-auto space-y-3 mb-4">
         {messages.map((msg) => {
           const isMe = msg.authorId === "me"
           const isGuardrail = msg.isGuardrail
@@ -77,7 +77,7 @@ export function ChatSection() {
               <div className={`max-w-xs lg:max-w-sm space-y-1`}>
                 {/* Author label (not shown for "me") */}
                 {!isMe && (
-                  <p className="text-xs text-gray-400 px-1">
+                  <p className="text-xs text-stone-400 px-1">
                     {msg.authorName}
                   </p>
                 )}
@@ -88,8 +88,8 @@ export function ChatSection() {
                     ${isGuardrail
                       ? "bg-yellow-100 border border-yellow-300 text-yellow-800 italic"
                       : isMe
-                        ? "bg-blue-600 text-white rounded-br-sm"
-                        : "bg-white border border-gray-200 text-gray-700 rounded-bl-sm shadow-sm"
+                        ? "bg-amber-600 text-white rounded-br-sm"
+                        : "bg-white border border-stone-200 text-stone-700 rounded-bl-sm shadow-sm"
                     }`}
                 >
                   {isGuardrail && <span className="not-italic mr-1">🤖</span>}
@@ -97,7 +97,7 @@ export function ChatSection() {
                 </div>
 
                 {/* Timestamp */}
-                <p className={`text-xs text-gray-400 px-1 ${isMe ? "text-right" : "text-left"}`}>
+                <p className={`text-xs text-stone-400 px-1 ${isMe ? "text-right" : "text-left"}`}>
                   {formatTime(msg.timestamp)}
                 </p>
               </div>
@@ -113,15 +113,15 @@ export function ChatSection() {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Share your experience with the group..."
-          className="flex-1 border border-gray-200 rounded-xl px-4 py-2.5 text-sm
-                     bg-white focus:outline-none focus:ring-2 focus:ring-blue-500
+          className="flex-1 border border-stone-200 rounded-xl px-4 py-2.5 text-sm
+                     bg-white focus:outline-none focus:ring-2 focus:ring-amber-500
                      focus:border-transparent"
         />
         <button
           type="submit"
           disabled={!input.trim()}
-          className="px-5 py-2.5 bg-blue-600 text-white rounded-xl text-sm font-medium
-                     hover:bg-blue-700 transition-colors disabled:opacity-40
+          className="px-5 py-2.5 bg-amber-600 text-white rounded-xl text-sm font-medium
+                     hover:bg-amber-700 transition-colors disabled:opacity-40
                      disabled:cursor-not-allowed"
         >
           Send

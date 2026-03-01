@@ -235,7 +235,7 @@ function DoctorPageInner() {
   return (
     <div
       ref={wrapperRef}
-      style={{ backgroundColor: "var(--theme-bg, #f9fafb)", transition: "background-color 2.5s ease", minHeight: "100vh" }}
+      style={{ transition: "background-color 2.5s ease" }}
     >
       <PageTransition>
         <AnimatePresence mode="wait">
@@ -249,13 +249,13 @@ function DoctorPageInner() {
               <h2 className="text-3xl font-bold mb-2" style={{ color: "var(--theme-text, #111827)" }}>
                 Doctor Recommender
               </h2>
-              <p className="mb-8 max-w-xl text-sm text-gray-500">
+              <p className="mb-8 max-w-xl text-sm text-stone-500">
                 Select your condition below, or speak to skip straight to matched doctors.
               </p>
 
               {/* 1. Condition Grid */}
               <div className="mb-8">
-                <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3">
+                <h3 className="text-xs font-semibold text-stone-400 uppercase tracking-widest mb-3">
                   Step 1 · Select your condition
                 </h3>
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
@@ -286,7 +286,7 @@ function DoctorPageInner() {
                     exit={{ opacity: 0, height: 0 }} transition={{ duration: 0.25 }}
                     className="mb-8 overflow-hidden"
                   >
-                    <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3">
+                    <h3 className="text-xs font-semibold text-stone-400 uppercase tracking-widest mb-3">
                       Step 2 · Select your stage
                     </h3>
                     <div className="flex flex-wrap gap-3">
@@ -315,7 +315,7 @@ function DoctorPageInner() {
                     exit={{ opacity: 0, height: 0 }} transition={{ duration: 0.25 }}
                     className="mb-8 overflow-hidden"
                   >
-                    <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3">
+                    <h3 className="text-xs font-semibold text-stone-400 uppercase tracking-widest mb-3">
                       Step 3 · How are you feeling today?
                     </h3>
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -324,7 +324,7 @@ function DoctorPageInner() {
                           onClick={() => { setEsi(opt.value); setEmotion(opt.value) }}
                           className={`p-4 rounded-2xl border-2 text-left transition-all duration-150
                             ${esi === opt.value ? `${opt.color} shadow-sm scale-[1.02]`
-                              : "border-gray-200 bg-white text-gray-600 hover:border-gray-300"}`}
+                              : "border-stone-200 bg-white text-stone-600 hover:border-gray-300"}`}
                         >
                           <div className="font-semibold text-sm mb-0.5">{opt.label}</div>
                           <div className="text-xs opacity-70">{opt.desc}</div>
@@ -338,11 +338,10 @@ function DoctorPageInner() {
               {/* ── Divider ── */}
               <div className="relative my-8">
                 <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-gray-200" />
+                  <div className="w-full border-t border-stone-200" />
                 </div>
                 <div className="relative flex justify-center">
-                  <span className="bg-white px-4 text-xs text-gray-400 uppercase tracking-widest font-medium"
-                    style={{ backgroundColor: "var(--theme-bg, white)" }}>
+                  <span className="bg-white px-4 text-xs text-stone-400 uppercase tracking-widest font-medium">
                     or use your voice
                   </span>
                 </div>
@@ -367,7 +366,7 @@ function DoctorPageInner() {
                     <p className="text-sm font-medium" style={{ color: "var(--theme-accent, #2563eb)" }}>
                       Analyzing your voice…
                     </p>
-                    <p className="text-xs text-gray-400">Transcribing and detecting your condition</p>
+                    <p className="text-xs text-stone-400">Transcribing and detecting your condition</p>
                   </motion.div>
                 )}
 
@@ -403,7 +402,7 @@ function DoctorPageInner() {
                       </div>
                       <button
                         onClick={() => { setVoiceDetected(false); setTranscript(""); setExtractedInfo(null); setEmotion("neutral") }}
-                        className="text-xs text-gray-400 hover:text-gray-600 underline shrink-0"
+                        className="text-xs text-stone-400 hover:text-stone-600 underline shrink-0"
                       >
                         Re-record
                       </button>
@@ -412,7 +411,7 @@ function DoctorPageInner() {
                     {(extractedInfo.condition || extractedInfo.stage) && (
                       <div className="mt-3 pt-3 border-t flex flex-wrap gap-2 items-center"
                         style={{ borderColor: "var(--theme-border)" }}>
-                        <span className="text-xs text-gray-500">Detected:</span>
+                        <span className="text-xs text-stone-500">Detected:</span>
                         {extractedInfo.condition && (
                           <span className="text-xs px-2 py-0.5 rounded-full font-medium text-white"
                             style={{ backgroundColor: "var(--theme-accent)" }}>
@@ -426,7 +425,7 @@ function DoctorPageInner() {
                           </span>
                         )}
                         {extractedInfo.condition && extractedInfo.stage && extractedInfo.condition_confidence >= 60 && (
-                          <span className="text-xs text-gray-400 ml-auto">Searching automatically…</span>
+                          <span className="text-xs text-stone-400 ml-auto">Searching automatically…</span>
                         )}
                       </div>
                     )}
@@ -448,7 +447,7 @@ function DoctorPageInner() {
                       </button>
                     </div>
                     <p className="text-sm font-medium text-red-500">Recording — tap to stop</p>
-                    <p className="text-xs text-gray-400 text-center max-w-xs">
+                    <p className="text-xs text-stone-400 text-center max-w-xs">
                       Try: "I was just diagnosed with Stage II breast cancer and I'm scared about what's next"
                     </p>
                   </motion.div>
@@ -471,8 +470,8 @@ function DoctorPageInner() {
                         <path d="M12 1a4 4 0 0 1 4 4v6a4 4 0 0 1-8 0V5a4 4 0 0 1 4-4zm0 2a2 2 0 0 0-2 2v6a2 2 0 0 0 4 0V5a2 2 0 0 0-2-2zm-7 8a1 1 0 0 1 1 1 6 6 0 0 0 12 0 1 1 0 1 1 2 0 8 8 0 0 1-7 7.93V21h3a1 1 0 1 1 0 2H8a1 1 0 1 1 0-2h3v-2.07A8 8 0 0 1 4 12a1 1 0 0 1 1-1z" />
                       </svg>
                     </button>
-                    <p className="text-sm font-medium text-gray-600">Describe your situation to skip ahead</p>
-                    <p className="text-xs text-gray-400">We'll detect your condition, stage, and mood automatically</p>
+                    <p className="text-sm font-medium text-stone-600">Describe your situation to skip ahead</p>
+                    <p className="text-xs text-stone-400">We'll detect your condition, stage, and mood automatically</p>
                     {micError && <p className="text-xs text-red-400 text-center max-w-xs">{micError}</p>}
                   </motion.div>
                 )}
@@ -562,9 +561,9 @@ function DoctorPageInner() {
                   ? Array.from({ length: 4 }).map((_, i) => <DoctorCardSkeleton key={i} />)
                   : doctors.length === 0
                   ? (
-                    <div className="col-span-2 text-center py-16 text-gray-400">
+                    <div className="col-span-2 text-center py-16 text-stone-400">
                       <div className="text-4xl mb-3">🔍</div>
-                      <p className="font-medium text-gray-500">No doctors found for your profile.</p>
+                      <p className="font-medium text-stone-500">No doctors found for your profile.</p>
                       <p className="text-sm mt-1">Try adjusting your condition or stage.</p>
                       <button onClick={handleReset} className="mt-4 hover:underline text-sm"
                         style={{ color: "var(--theme-accent)" }}>

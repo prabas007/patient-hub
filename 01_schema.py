@@ -33,7 +33,7 @@ from cortex import CortexClient, DistanceMetric
 # ── Config ────────────────────────────────────────────────────────────────────
 
 VECTORAI_HOST = "localhost:50051"   # override with env var VECTORAI_HOST
-EMBEDDING_DIM = 3072                 # Gemini text-embedding-004 output dimension
+EMBEDDING_DIM = 3072                 # Gemini gemini-embedding-001 output dimension
 
 # HNSW tuning — balance recall vs. speed
 HNSW_M             = 16    # edges per node        (higher → better recall, more RAM)

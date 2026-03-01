@@ -6,16 +6,16 @@ interface SkeletonProps {
 export function Skeleton({ variant = "text", className = "" }: SkeletonProps) {
   if (variant === "avatar") {
     return (
-      <div className={`animate-pulse bg-gray-200 rounded-full w-10 h-10 shrink-0 ${className}`} />
+      <div className={`animate-pulse bg-stone-200 rounded-full w-10 h-10 shrink-0 ${className}`} />
     )
   }
   if (variant === "card") {
     return (
-      <div className={`animate-pulse bg-gray-200 rounded-2xl w-full ${className}`} />
+      <div className={`animate-pulse bg-stone-200 rounded-2xl w-full ${className}`} />
     )
   }
   return (
-    <div className={`animate-pulse bg-gray-200 rounded h-4 w-full ${className}`} />
+    <div className={`animate-pulse bg-stone-200 rounded h-4 w-full ${className}`} />
   )
 }
 

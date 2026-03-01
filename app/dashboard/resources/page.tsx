@@ -3,11 +3,11 @@ import Link from "next/link"
 export default function ResourcesPage() {
   return (
     <div>
-      <h2 className="text-3xl font-bold text-gray-900 mb-4">
+      <h2 className="text-3xl font-bold text-stone-900 mb-4">
         Resources
       </h2>
 
-      <p className="text-gray-600 mb-8 max-w-2xl">
+      <p className="text-stone-600 mb-8 max-w-2xl">
         Trusted educational resources and AI-curated treatment guidance.
       </p>
 
@@ -24,8 +24,8 @@ export default function ResourcesPage() {
       </Link>
 
       {/* Placeholder Content */}
-      <div className="mt-6 bg-gray-50 rounded-xl p-6 shadow-sm">
-        <p className="text-gray-700">
+      <div className="mt-6 bg-stone-50 rounded-xl p-6 shadow-sm">
+        <p className="text-stone-700">
           Personalized educational materials will appear here.
         </p>
       </div>

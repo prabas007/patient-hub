@@ -1,6 +1,6 @@
 services:
   vectoraidb:
-    image: localhost/actian/vectoraidb:1.0b
+    image: williamimoh/actian-vectorai-db:1.0b
     container_name: vectoraidb
     ports:
       - "50051:50051"

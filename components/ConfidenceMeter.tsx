@@ -24,12 +24,12 @@ export function ConfidenceMeter({ score, showLabel = true }: ConfidenceMeterProp
   return (
     <div className="space-y-1">
       {showLabel && (
-        <div className="flex justify-between text-xs text-gray-500">
+        <div className="flex justify-between text-xs text-stone-500">
           <span>Match Score</span>
-          <span className="font-semibold text-gray-700">{score}%</span>
+          <span className="font-semibold text-stone-700">{score}%</span>
         </div>
       )}
-      <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+      <div className="h-2 bg-stone-100 rounded-full overflow-hidden">
         <div
           className={`h-full confidence-bar rounded-full ${colorClass}`}
           style={{ width: `${width}%` }}

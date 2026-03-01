@@ -111,11 +111,11 @@ function DoctorDetailClient({ params, searchParams }: PageProps) {
         <div className="bg-white rounded-2xl border p-6 flex flex-col justify-between"
           style={{ borderColor: "var(--theme-border)" }}>
           <div>
-            <h3 className="font-semibold text-gray-700 mb-4">Match Confidence</h3>
+            <h3 className="font-semibold text-stone-700 mb-4">Match Confidence</h3>
             <div className="text-5xl font-bold mb-1" style={{ color: "var(--theme-accent)" }}>
               {matchScore}%
             </div>
-            <p className="text-xs text-gray-400 mb-3">based on patient similarity</p>
+            <p className="text-xs text-stone-400 mb-3">based on patient similarity</p>
             <ConfidenceMeter score={matchScore} showLabel={false} />
 
             {/* Justification */}
@@ -125,18 +125,18 @@ function DoctorDetailClient({ params, searchParams }: PageProps) {
               {justification.body}
             </div>
           </div>
-          <p className="text-xs text-gray-400 mt-4">
+          <p className="text-xs text-stone-400 mt-4">
             Matched against {patientCount.toLocaleString()} similar patient outcomes
           </p>
         </div>
       </div>
 
       {/* Recovery Chart */}
-      <div className="bg-white rounded-2xl border border-gray-200 p-6">
-        <h3 className="font-semibold text-gray-700 mb-2">
+      <div className="bg-white rounded-2xl border border-stone-200 p-6">
+        <h3 className="font-semibold text-stone-700 mb-2">
           Patient Recovery Rates — Last 6 Months
         </h3>
-        <p className="text-xs text-gray-400 mb-6">
+        <p className="text-xs text-stone-400 mb-6">
           Percentage of patients with similar profiles achieving positive outcomes
         </p>
         <div style={{ minHeight: "160px" }}>

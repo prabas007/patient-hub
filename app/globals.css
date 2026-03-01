@@ -1,15 +1,14 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f1f5f9;
+  --foreground: #1c1917;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-jakarta);
 
   /* Confidence meter colors */
   --color-meter-green: #16a34a;
@@ -20,15 +19,15 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #0c0a09;
+    --foreground: #e7e5e4;
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
 }
 
 /* ─── Emotional State System ──────────────────────────────────────────────── */
@@ -61,9 +60,9 @@ body {
   --heading-size: 2.25rem;
 }
 
-/* Calm: soft blue-tinted background */
+/* Calm: soft warm background */
 [data-emotion="calm"] main {
-  background-color: #f8fafc;
+  background-color: #faf8f5;
 }
 
 /* Focused: higher contrast, slightly smaller main card padding */

@@ -119,8 +119,8 @@ export default function CirclePage() {
   return (
     <PageTransition>
       {/* Header */}
-      <h2 className="text-3xl font-bold text-gray-900 mb-2">Care Circle</h2>
-      <p className="text-gray-600 mb-8 max-w-2xl">
+      <h2 className="text-3xl font-bold text-stone-900 mb-2">Care Circle</h2>
+      <p className="text-stone-600 mb-8 max-w-2xl">
         Connect with patients in similar stages of care and recovery. Share
         experiences and track your milestones together.
       </p>
@@ -128,22 +128,22 @@ export default function CirclePage() {
       {/* ── Member Section ──────────────────────────────────────────────── */}
       <section className="mb-10">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="font-semibold text-gray-700">
+          <h3 className="font-semibold text-stone-700">
             {memberTab === "matched" ? "Matched Members" : "Personal Circle"}
-            <span className="ml-2 text-sm text-gray-400 font-normal">
+            <span className="ml-2 text-sm text-stone-400 font-normal">
               ({visibleMembers.length}
               {hiddenCount > 0 ? ` of ${activeMembers.length}` : ""} shown)
             </span>
           </h3>
 
           {/* Matched / Personal toggle */}
-          <div className="flex bg-gray-100 rounded-xl p-1 gap-1">
+          <div className="flex bg-stone-100 rounded-xl p-1 gap-1">
             <button
               onClick={() => setMemberTab("matched")}
               className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
                 memberTab === "matched"
-                  ? "bg-white text-blue-600 shadow-sm"
-                  : "text-gray-500 hover:text-gray-700"
+                  ? "bg-white text-amber-700 shadow-sm"
+                  : "text-stone-500 hover:text-stone-700"
               }`}
             >
               Matched
@@ -152,8 +152,8 @@ export default function CirclePage() {
               onClick={() => setMemberTab("personal")}
               className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
                 memberTab === "personal"
-                  ? "bg-white text-blue-600 shadow-sm"
-                  : "text-gray-500 hover:text-gray-700"
+                  ? "bg-white text-amber-700 shadow-sm"
+                  : "text-stone-500 hover:text-stone-700"
               }`}
             >
               Personal
@@ -166,37 +166,37 @@ export default function CirclePage() {
           <div className="mb-6 space-y-4">
             {/* Incoming Friend Requests */}
             {incomingRequests.length > 0 && (
-              <div className="bg-blue-50 border border-blue-100 rounded-2xl p-4">
-                <p className="text-xs font-semibold text-blue-700 uppercase tracking-wide mb-3">
+              <div className="bg-amber-50 border border-amber-100 rounded-2xl p-4">
+                <p className="text-xs font-semibold text-amber-700 uppercase tracking-wide mb-3">
                   Incoming Requests ({incomingRequests.length})
                 </p>
                 <div className="space-y-2">
                   {incomingRequests.map((req) => (
                     <div
                       key={req.id}
-                      className="bg-white rounded-xl border border-blue-100 px-3 py-2.5 flex items-center gap-3"
+                      className="bg-white rounded-xl border border-amber-100 px-3 py-2.5 flex items-center gap-3"
                     >
-                      <div className="w-9 h-9 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-bold text-sm shrink-0">
+                      <div className="w-9 h-9 rounded-full bg-amber-100 flex items-center justify-center text-amber-700 font-bold text-sm shrink-0">
                         {req.initials}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="font-semibold text-gray-900 text-sm">
+                        <p className="font-semibold text-stone-900 text-sm">
                           {req.name}
                         </p>
-                        <p className="text-xs text-gray-400 truncate">
+                        <p className="text-xs text-stone-400 truncate">
                           {req.condition} · {req.stage}
                         </p>
                       </div>
                       <div className="flex gap-1.5 shrink-0">
                         <button
                           onClick={() => handleAccept(req.id)}
-                          className="px-3 py-1 bg-blue-600 text-white text-xs font-medium rounded-lg hover:bg-blue-700 transition-colors"
+                          className="px-3 py-1 bg-amber-600 text-white text-xs font-medium rounded-lg hover:bg-amber-700 transition-colors"
                         >
                           Accept
                         </button>
                         <button
                           onClick={() => handleDecline(req.id)}
-                          className="px-3 py-1 bg-gray-100 text-gray-500 text-xs font-medium rounded-lg hover:bg-gray-200 transition-colors"
+                          className="px-3 py-1 bg-stone-100 text-stone-500 text-xs font-medium rounded-lg hover:bg-stone-200 transition-colors"
                         >
                           Decline
                         </button>
@@ -223,10 +223,10 @@ export default function CirclePage() {
                         {member.initials}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="font-semibold text-gray-900 text-sm">
+                        <p className="font-semibold text-stone-900 text-sm">
                           {member.name}
                         </p>
-                        <p className="text-xs text-gray-400 truncate">
+                        <p className="text-xs text-stone-400 truncate">
                           {member.condition}
                         </p>
                       </div>
@@ -242,15 +242,15 @@ export default function CirclePage() {
             {/* Empty state for Personal tab when no requests */}
             {incomingRequests.length === 0 &&
               pendingMembers.length === 0 && (
-                <p className="text-xs text-gray-400 text-center py-1">
+                <p className="text-xs text-stone-400 text-center py-1">
                   No pending requests. Add friends from the Matched tab.
                 </p>
               )}
 
             {/* Divider before personal member grid */}
             {MOCK_PERSONAL_MEMBERS.length > 0 && (
-              <div className="border-t border-gray-100 pt-2">
-                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">
+              <div className="border-t border-stone-100 pt-2">
+                <p className="text-xs font-semibold text-stone-500 uppercase tracking-wide mb-3">
                   Your Personal Circle
                 </p>
               </div>
@@ -273,7 +273,7 @@ export default function CirclePage() {
             ))}
           </div>
           {hiddenCount > 0 && (
-            <p className="text-center text-xs text-gray-400 mt-3">
+            <p className="text-center text-xs text-stone-400 mt-3">
               +{hiddenCount} more members not shown
             </p>
           )}
@@ -281,7 +281,7 @@ export default function CirclePage() {
 
         {memberTab === "matched" && (
           <div className="mt-3">
-            <span className="text-xs bg-blue-50 text-blue-600 px-3 py-1 rounded-full border border-blue-100">
+            <span className="text-xs bg-amber-50 text-amber-700 px-3 py-1 rounded-full border border-amber-100">
               Stage 2 Recovery cohort
             </span>
           </div>
@@ -291,15 +291,15 @@ export default function CirclePage() {
       {/* ── Circle Milestones ───────────────────────────────────────────── */}
       <section>
         <div className="flex items-center justify-between mb-4">
-          <h3 className="font-semibold text-gray-700">
+          <h3 className="font-semibold text-stone-700">
             Circle Milestones
-            <span className="ml-2 text-sm text-gray-400 font-normal">
+            <span className="ml-2 text-sm text-stone-400 font-normal">
               (shared progress from your circle)
             </span>
           </h3>
           <button
             onClick={() => setShowMilestoneForm((prev) => !prev)}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 text-white rounded-xl text-sm font-medium hover:bg-blue-700 transition-colors"
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-amber-600 text-white rounded-xl text-sm font-medium hover:bg-amber-700 transition-colors"
           >
             <span className="text-base leading-none font-light">+</span>
             Add Milestone
@@ -310,9 +310,9 @@ export default function CirclePage() {
         {showMilestoneForm && (
           <form
             onSubmit={addMilestone}
-            className="bg-blue-50 border border-blue-100 rounded-2xl p-5 mb-5 space-y-3"
+            className="bg-amber-50 border border-amber-100 rounded-2xl p-5 mb-5 space-y-3"
           >
-            <p className="text-sm font-semibold text-blue-800">
+            <p className="text-sm font-semibold text-amber-800">
               Share a new milestone with your circle
             </p>
             <input
@@ -320,20 +320,20 @@ export default function CirclePage() {
               value={milestoneTitle}
               onChange={(e) => setMilestoneTitle(e.target.value)}
               placeholder="Milestone title *"
-              className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full border border-stone-200 rounded-xl px-4 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
             />
             <input
               value={milestoneDesc}
               onChange={(e) => setMilestoneDesc(e.target.value)}
               placeholder="Description (optional)"
-              className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full border border-stone-200 rounded-xl px-4 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
             />
-            <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer select-none">
+            <label className="flex items-center gap-2 text-sm text-stone-700 cursor-pointer select-none">
               <input
                 type="checkbox"
                 checked={milestoneCompleted}
                 onChange={(e) => setMilestoneCompleted(e.target.checked)}
-                className="rounded accent-blue-600"
+                className="rounded accent-amber-600"
               />
               Mark as completed
             </label>
@@ -341,14 +341,14 @@ export default function CirclePage() {
               <button
                 type="button"
                 onClick={() => setShowMilestoneForm(false)}
-                className="px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-xl transition-colors"
+                className="px-4 py-2 text-sm text-stone-600 hover:bg-stone-100 rounded-xl transition-colors"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={!milestoneTitle.trim()}
-                className="px-4 py-2 text-sm bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                className="px-4 py-2 text-sm bg-amber-600 text-white rounded-xl hover:bg-amber-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 Share
               </button>
@@ -366,7 +366,7 @@ export default function CirclePage() {
             />
           ))}
           {allMilestones.length === 0 && (
-            <p className="col-span-2 text-sm text-gray-400 text-center py-6">
+            <p className="col-span-2 text-sm text-stone-400 text-center py-6">
               No milestones yet. Be the first to share one!
             </p>
           )}

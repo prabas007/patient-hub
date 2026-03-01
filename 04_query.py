@@ -63,14 +63,13 @@ def get_query_embedding(text: str, dim: int = 768) -> list:
     api_key = os.getenv("GEMINI_API_KEY")
     if api_key:
         try:
-            import google.generativeai as genai
-            genai.configure(api_key=api_key)
-            res = genai.embed_content(
-                model="models/text-embedding-004",
-                content=text,
-                task_type="RETRIEVAL_QUERY",
+            from google import genai
+            client = genai.Client(api_key=api_key)
+            res = client.models.embed_content(
+                model="gemini-embedding-001",
+                contents=text,
             )
-            vec = np.array(res["embedding"], dtype=np.float32)
+            vec = np.array(res.embeddings[0].values, dtype=np.float32)
             vec /= np.linalg.norm(vec)
             return vec.tolist()
         except Exception as exc:
@@ -132,17 +131,12 @@ def retrieve_similar_experiences(
 
     if has_filters:
         raw_results = client.search_filtered(
-            collection = "patient_experiences",
-            query      = query_embedding,
-            filter     = f,
-            top_k      = top_k,
-        )
+            "patient_experiences", query_embedding, f, top_k=top_k
+        ) or []
     else:
         raw_results = client.search(
-            collection = "patient_experiences",
-            query      = query_embedding,
-            top_k      = top_k,
-        )
+            "patient_experiences", query_embedding, top_k=top_k
+        ) or []
 
     results = []
     for r in raw_results:

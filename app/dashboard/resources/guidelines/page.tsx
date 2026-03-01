@@ -1,11 +1,11 @@
 export default function GuidelinesPage() {
   return (
     <div>
-      <h2 className="text-3xl font-bold text-gray-900 mb-6">
+      <h2 className="text-3xl font-bold text-stone-900 mb-6">
         LINK-CARE Usage Guidelines
       </h2>
 
-      <div className="space-y-6 text-gray-700 max-w-3xl">
+      <div className="space-y-6 text-stone-700 max-w-3xl">
         <div className="bg-red-50 border border-red-200 rounded-xl p-6">
           <h3 className="text-lg font-semibold text-red-700 mb-2">
             ⚠ Important Notice
