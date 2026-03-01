@@ -46,3 +46,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Vector DB data
+data/
+
+# Generated seed data
+carelink_seed_data.json

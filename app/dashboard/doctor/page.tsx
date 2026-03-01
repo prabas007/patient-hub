@@ -73,6 +73,66 @@ function useVoiceRecorder() {
   return { isRecording, audioBlob, micError, start, stop }
 }
 
+// ── TTS Hook ─────────────────────────────────────────────────────────────────
+
+function useTTS() {
+  const audioRef = useRef<HTMLAudioElement | null>(null)
+  const [isPlaying, setIsPlaying] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [ttsError, setTtsError]   = useState<string | null>(null)
+
+  const speak = useCallback(async (text: string) => {
+    // If already playing, stop it
+    if (audioRef.current) {
+      audioRef.current.pause()
+      audioRef.current = null
+      setIsPlaying(false)
+      return
+    }
+
+    setIsLoading(true)
+    setTtsError(null)
+
+    try {
+      const res = await fetch("/api/tts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text }),
+      })
+
+      if (!res.ok) throw new Error(`TTS failed: ${res.status}`)
+
+      const blob  = await res.blob()
+      const url   = URL.createObjectURL(blob)
+      const audio = new Audio(url)
+      audioRef.current = audio
+
+      audio.onended = () => {
+        setIsPlaying(false)
+        URL.revokeObjectURL(url)
+        audioRef.current = null
+      }
+
+      await audio.play()
+      setIsPlaying(true)
+    } catch (err: any) {
+      setTtsError(err.message)
+    } finally {
+      setIsLoading(false)
+    }
+  }, [])
+
+  const stop = useCallback(() => {
+    if (audioRef.current) {
+      audioRef.current.pause()
+      audioRef.current = null
+    }
+    setIsPlaying(false)
+  }, [])
+
+  return { speak, stop, isPlaying, isLoading, ttsError }
+}
+
 function emotionIcon(e: EsiCategory | "neutral") {
   return { calm: "🌊", focused: "⚡", anxious: "🌤️", overwhelmed: "🌸", neutral: "✨" }[e] ?? "✨"
 }
@@ -92,6 +152,8 @@ function DoctorPageInner() {
   const [ragSummary, setRagSummary] = useState<any>(null)
 
   const { isRecording, audioBlob, micError, start, stop } = useVoiceRecorder()
+  const { speak, isPlaying: ttsPlaying, isLoading: ttsLoading, ttsError } = useTTS()
+
   const [isProcessing, setIsProcessing]   = useState(false)
   const [transcript, setTranscript]       = useState("")
   const [voiceDetected, setVoiceDetected] = useState(false)
@@ -105,7 +167,6 @@ function DoctorPageInner() {
 
   const wrapperRef = useRef<HTMLDivElement>(null)
 
-  // Apply CSS vars on emotion change (2.5s fade via inline style transition)
   useEffect(() => {
     const el = wrapperRef.current
     if (!el) return
@@ -128,17 +189,15 @@ function DoctorPageInner() {
   async function processAudio(blob: Blob) {
     setIsProcessing(true)
     try {
-      // 1. Transcribe
       const form = new FormData()
       form.append("audio", blob, "recording.webm")
-      const txRes   = await fetch("/api/transcribe", { method: "POST", body: form })
-      const txData  = await txRes.json()
-      const text    = txData.transcript ?? ""
+      const txRes  = await fetch("/api/transcribe", { method: "POST", body: form })
+      const txData = await txRes.json()
+      const text   = txData.transcript ?? ""
       setTranscript(text)
       if (!text) return
 
-      // 2. Extract condition + stage + emotion in one call
-      const exRes  = await fetch("/api/voice-extract", {
+      const exRes     = await fetch("/api/voice-extract", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ transcript: text }),
@@ -151,7 +210,6 @@ function DoctorPageInner() {
       setExtractedInfo(extracted)
       setVoiceDetected(true)
 
-      // 3. If confident enough → auto-search, skip to results
       if (extracted.condition && extracted.stage && extracted.condition_confidence >= 60) {
         setCondition(extracted.condition)
         setStage(extracted.stage)
@@ -162,7 +220,6 @@ function DoctorPageInner() {
           queryText:   text,
         })
       } else {
-        // Pre-fill what we can, user confirms
         if (extracted.condition) setCondition(extracted.condition)
         if (extracted.stage)     setStage(extracted.stage)
       }
@@ -278,7 +335,7 @@ function DoctorPageInner() {
                 </div>
               </div>
 
-              {/* 2. Stage — manual path only, hidden after voice detection */}
+              {/* 2. Stage */}
               <AnimatePresence>
                 {condition && !voiceDetected && (
                   <motion.div key="stages"
@@ -307,7 +364,7 @@ function DoctorPageInner() {
                 )}
               </AnimatePresence>
 
-              {/* 3. ESI — manual path only, hidden after voice detection */}
+              {/* 3. ESI */}
               <AnimatePresence>
                 {stage && !voiceDetected && (
                   <motion.div key="esi"
@@ -534,6 +591,7 @@ function DoctorPageInner() {
                 </div>
               )}
 
+              {/* ── AI Summary with TTS button ── */}
               {!isLoading && ragSummary?.narrative && (
                 <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
                   className="rounded-2xl p-5 mb-6 border"
@@ -543,16 +601,54 @@ function DoctorPageInner() {
                     <span>🤖</span>
                     <span className="font-semibold text-sm" style={{ color: "var(--theme-accent)" }}>AI Summary</span>
                     {ragSummary.confidence_level != null && (
-                      <span className="ml-auto text-xs px-2 py-0.5 rounded-full"
+                      <span className="text-xs px-2 py-0.5 rounded-full"
                         style={{ backgroundColor: "var(--theme-accent-soft)", color: "var(--theme-accent)" }}>
                         {ragSummary.confidence_level}% confidence
                       </span>
                     )}
+
+                    {/* ── Read Aloud Button ── */}
+                    <button
+                      onClick={() => speak(ragSummary.narrative)}
+                      disabled={ttsLoading}
+                      className="ml-auto flex items-center gap-1.5 text-xs font-medium px-3 py-1.5
+                                 rounded-xl border transition-all duration-150 active:scale-95
+                                 disabled:opacity-50 disabled:cursor-not-allowed"
+                      style={{
+                        borderColor: "var(--theme-accent)",
+                        color: ttsPlaying ? "white" : "var(--theme-accent)",
+                        backgroundColor: ttsPlaying
+                          ? "var(--theme-accent)"
+                          : "var(--theme-accent-soft, transparent)",
+                      }}
+                      title={ttsPlaying ? "Stop reading" : "Read aloud"}
+                    >
+                      {ttsLoading ? (
+                        <svg className="animate-spin w-3.5 h-3.5" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                        </svg>
+                      ) : ttsPlaying ? (
+                        <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+                          <rect x="6" y="6" width="12" height="12" rx="1" />
+                        </svg>
+                      ) : (
+                        <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 7.97v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>
+                        </svg>
+                      )}
+                      {ttsLoading ? "Loading…" : ttsPlaying ? "Stop" : "Read aloud"}
+                    </button>
                   </div>
+
                   <p className="text-sm leading-relaxed"
                     style={{ color: "color-mix(in srgb, var(--theme-text) 80%, transparent)" }}>
                     {ragSummary.narrative}
                   </p>
+
+                  {ttsError && (
+                    <p className="text-xs text-red-400 mt-2">⚠ {ttsError}</p>
+                  )}
                 </motion.div>
               )}
 
