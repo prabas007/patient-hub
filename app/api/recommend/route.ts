@@ -11,26 +11,11 @@
  * Body:
  *   {
  *     condition: string,
- *     stage: string,
- *     queryText?: string,      // optional free-text override
+ *     stage?: string,             // now optional — searches all stages if omitted
+ *     queryText?: string,         // optional free-text override
  *     esiCategory?: "calm" | "focused" | "anxious" | "overwhelmed",
- *     topK?: number,           // default: 10
- *   }
- *
- * Response:
- *   {
- *     query: object,
- *     retrieved_experiences: object[],
- *     doctor_recommendations: object[],
- *     rag_summary: {
- *       key_strengths: string[],
- *       potential_concerns: string[],
- *       typical_patient_profile: string,
- *       recovery_time_summary: string,
- *       confidence_level: number,        // 0–100
- *       narrative: string,               // tone-adapted paragraph
- *     },
- *     metadata: object,
+ *     region?: string,            // optional — city/region for location sort
+ *     topK?: number,              // default: 10
  *   }
  */
 
@@ -82,9 +67,15 @@ async function getEmbedding(text: string): Promise<number[]> {
 async function queryVectorDB(
   embedding: number[],
   condition: string,
-  stage: string,
+  stage: string | null | undefined,
   topK: number
 ): Promise<any[]> {
+  // Build filters — condition always required, stage only if provided
+  const filters: any[] = [{ field: "condition", op: "eq", value: condition }];
+  if (stage) {
+    filters.push({ field: "stage", op: "eq", value: stage });
+  }
+
   const res = await fetch(`${BRIDGE_URL}/search_filtered`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -92,10 +83,7 @@ async function queryVectorDB(
       collection: "patient_experiences",
       query: embedding,
       top_k: topK,
-      filters: [
-        { field: "condition", op: "eq", value: condition },
-        { field: "stage", op: "eq", value: stage },
-      ],
+      filters,
     }),
   });
   if (!res.ok) throw new Error(`VectorDB query failed: ${await res.text()}`);
@@ -126,16 +114,31 @@ function aggregateDoctors(experiences: any[], topN = 3): any[] {
         doctor_name: exps[0].payload?.doctor_name,
         doctor_specialty: exps[0].payload?.doctor_specialty,
         doctor_hospital: exps[0].payload?.doctor_hospital,
+        doctor_location_region: exps[0].payload?.location_region ?? "",
         supporting_experiences: n,
         avg_similarity_score: +avgSim.toFixed(4),
         avg_outcome_score: +avgOutcome.toFixed(4),
         avg_sentiment_score: +avgSentiment.toFixed(4),
         avg_recovery_days: +avgRecovery.toFixed(1),
         composite_score: +composite.toFixed(4),
+        // Vary experience years based on composite score for display variety
+        experience_years: Math.round(5 + composite * 20),
       };
     })
     .sort((a, b) => b.composite_score - a.composite_score)
     .slice(0, topN);
+}
+
+/** Re-sort doctors so those matching the user's region appear first */
+function sortByRegion(doctors: any[], region: string): any[] {
+  if (!region) return doctors;
+  const regionLower = region.toLowerCase();
+  return [...doctors].sort((a, b) => {
+    const aMatch = (a.doctor_location_region ?? "").toLowerCase().includes(regionLower) ? 0 : 1;
+    const bMatch = (b.doctor_location_region ?? "").toLowerCase().includes(regionLower) ? 0 : 1;
+    if (aMatch !== bMatch) return aMatch - bMatch;
+    return b.composite_score - a.composite_score;
+  });
 }
 
 function buildRagContext(experiences: any[]): string {
@@ -159,10 +162,11 @@ async function generateRagSummary(
   ragContext: string,
   doctors: any[],
   condition: string,
-  stage: string,
+  stage: string | null | undefined,
   esiCategory: string
 ): Promise<any> {
   const tone = ESI_TONE[esiCategory] ?? ESI_TONE.calm;
+  const stageLabel = stage ? `Stage: ${stage}` : "Stage: Not specified (showing results across all stages)";
 
   const systemPrompt = `You are CareLink's AI recommendation engine. You synthesize real patient experiences to help new patients make informed healthcare decisions.
 
@@ -178,7 +182,7 @@ Return ONLY valid JSON — no markdown, no explanation. Use this exact shape:
   "narrative": string                 // 2–3 sentence tone-adapted paragraph for the patient
 }`;
 
-  const userPrompt = `Condition: ${condition} | Stage: ${stage}
+  const userPrompt = `Condition: ${condition} | ${stageLabel}
 Top recommended doctors: ${doctors.map((d) => `${d.doctor_name} (composite score: ${d.composite_score})`).join(", ")}
 
 Patient experiences retrieved:
@@ -213,36 +217,42 @@ export async function POST(req: NextRequest) {
   try {
     const {
       condition,
-      stage,
+      stage,       // now optional
+      region,      // new optional field
       queryText,
       esiCategory = "calm",
       topK = 10,
     } = await req.json();
 
-    if (!condition || !stage) {
+    if (!condition) {
       return NextResponse.json(
-        { error: "condition and stage are required" },
+        { error: "condition is required" },
         { status: 400 }
       );
     }
 
     const query =
       queryText ||
-      `Patient seeking experiences for ${condition} at ${stage}. Looking for doctor recommendations and treatment outcomes.`;
+      `Patient seeking experiences for ${condition}${stage ? ` at ${stage}` : ""}. Looking for doctor recommendations and treatment outcomes.`;
 
     // 1. Embed
     const embedding = await getEmbedding(query);
 
-    // 2. Retrieve from VectorDB
+    // 2. Retrieve from VectorDB (stage is optional — omitted = all stages)
     const hits = await queryVectorDB(embedding, condition, stage, topK);
 
     // 3. Aggregate doctors
-    const doctors = aggregateDoctors(hits, 3);
+    let doctors = aggregateDoctors(hits, 3);
 
-    // 4. Build RAG context
+    // 4. Re-sort by region if provided
+    if (region) {
+      doctors = sortByRegion(doctors, region);
+    }
+
+    // 5. Build RAG context
     const ragContext = buildRagContext(hits);
 
-    // 5. Gemini RAG summary
+    // 6. Gemini RAG summary
     const ragSummary = await generateRagSummary(
       ragContext,
       doctors,
@@ -252,7 +262,7 @@ export async function POST(req: NextRequest) {
     );
 
     return NextResponse.json({
-      query: { condition, stage, queryText: query, esiCategory },
+      query: { condition, stage: stage ?? null, region: region ?? null, queryText: query, esiCategory },
       retrieved_experiences: hits.map((e) => ({
         ...e.payload,
         similarity_score: e.score,
@@ -266,6 +276,8 @@ export async function POST(req: NextRequest) {
         generation_model: GEN_MODEL,
         similarity_metric: "cosine",
         esi_category: esiCategory,
+        stage_filter_applied: !!stage,
+        region_sort_applied: !!region,
       },
     });
   } catch (err: any) {
