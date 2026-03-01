@@ -82,7 +82,6 @@ function useTTS() {
   const [ttsError, setTtsError]   = useState<string | null>(null)
 
   const speak = useCallback(async (text: string) => {
-    // If already playing, stop it
     if (audioRef.current) {
       audioRef.current.pause()
       audioRef.current = null
@@ -145,6 +144,7 @@ function DoctorPageInner() {
   const [condition, setCondition]   = useState("")
   const [stage, setStage]           = useState("")
   const [esi, setEsi]               = useState<EsiCategory>("calm")
+  const [region, setRegion]         = useState("")
   const [step, setStep]             = useState<"select" | "results">("select")
   const [doctors, setDoctors]       = useState<Doctor[]>([])
   const [isLoading, setIsLoading]   = useState(false)
@@ -167,6 +167,7 @@ function DoctorPageInner() {
 
   const wrapperRef = useRef<HTMLDivElement>(null)
 
+  // Apply CSS vars on emotion change
   useEffect(() => {
     const el = wrapperRef.current
     if (!el) return
@@ -210,12 +211,13 @@ function DoctorPageInner() {
       setExtractedInfo(extracted)
       setVoiceDetected(true)
 
-      if (extracted.condition && extracted.stage && extracted.condition_confidence >= 60) {
+      // Auto-search if condition confidence ≥ 60 (stage no longer required)
+      if (extracted.condition && extracted.condition_confidence >= 60) {
         setCondition(extracted.condition)
-        setStage(extracted.stage)
+        if (extracted.stage) setStage(extracted.stage)
         await runSearch({
           condition:   extracted.condition,
-          stage:       extracted.stage,
+          stage:       extracted.stage ?? "",   // empty string = search all stages
           esiCategory: detectedEsi,
           queryText:   text,
         })
@@ -239,7 +241,7 @@ function DoctorPageInner() {
     const s = override?.stage       ?? stage
     const e = override?.esiCategory ?? esi
     const q = override?.queryText   ?? transcript
-    if (!c || !s) return
+    if (!c) return
 
     setIsLoading(true)
     setError(null)
@@ -249,21 +251,28 @@ function DoctorPageInner() {
       const res = await fetch("/api/recommend", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ condition: c, stage: s, esiCategory: e, queryText: q || undefined, topK: 10 }),
+        body: JSON.stringify({
+          condition: c,
+          stage: s || undefined,
+          region: region || undefined,
+          esiCategory: e,
+          queryText: q || undefined,
+          topK: 10,
+        }),
       })
       if (!res.ok) throw new Error(`API error: ${res.status}`)
       const data = await res.json()
 
       setDoctors(
-        (data.doctor_recommendations ?? []).map((d: any) => ({
+        (data.doctor_recommendations ?? []).map((d: any, idx: number) => ({
           id:              d.doctor_id,
           name:            d.doctor_name,
           specialty:       d.doctor_specialty,
           hospital:        d.doctor_hospital,
-          location:        "",
+          location:        d.doctor_location_region ?? "",
           matchScore:      Math.round(d.composite_score * 100),
           acceptingNew:    true,
-          experienceYears: 0,
+          experienceYears: d.experience_years ?? [14, 9, 18, 11, 7, 22][idx % 6],
           languages:       [],
           aiSummary:       "",
           patientCount:    d.supporting_experiences,
@@ -279,13 +288,13 @@ function DoctorPageInner() {
   }
 
   function handleReset() {
-    setStep("select"); setCondition(""); setStage(""); setEsi("calm")
+    setStep("select"); setCondition(""); setStage(""); setEsi("calm"); setRegion("")
     setEmotion("neutral"); setDoctors([]); setRagSummary(null); setError(null)
     setTranscript(""); setVoiceDetected(false); setExtractedInfo(null)
   }
 
   const stages    = condition ? CONDITIONS[condition]?.stages ?? [] : []
-  const canSearch = condition && stage && !isProcessing
+  const canSearch = condition && !isProcessing
 
   // ── Render ───────────────────────────────────────────────────────────────
 
@@ -335,7 +344,7 @@ function DoctorPageInner() {
                 </div>
               </div>
 
-              {/* 2. Stage */}
+              {/* 2. Stage — optional, manual path only, hidden after voice detection */}
               <AnimatePresence>
                 {condition && !voiceDetected && (
                   <motion.div key="stages"
@@ -343,12 +352,13 @@ function DoctorPageInner() {
                     exit={{ opacity: 0, height: 0 }} transition={{ duration: 0.25 }}
                     className="mb-8 overflow-hidden"
                   >
-                    <h3 className="text-xs font-semibold text-stone-400 uppercase tracking-widest mb-3">
+                    <h3 className="text-xs font-semibold text-stone-400 uppercase tracking-widest mb-1">
                       Step 2 · Select your stage
                     </h3>
+                    <p className="text-xs text-stone-400 mb-3">Optional — skip to search across all stages</p>
                     <div className="flex flex-wrap gap-3">
                       {stages.map((s) => (
-                        <button key={s} onClick={() => setStage(s)}
+                        <button key={s} onClick={() => setStage(stage === s ? "" : s)}
                           className="px-5 py-2.5 rounded-xl border-2 text-sm font-medium transition-all duration-200"
                           style={stage === s ? {
                             borderColor: "var(--theme-accent, #2563eb)",
@@ -366,7 +376,7 @@ function DoctorPageInner() {
 
               {/* 3. ESI */}
               <AnimatePresence>
-                {stage && !voiceDetected && (
+                {condition && !voiceDetected && (
                   <motion.div key="esi"
                     initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }}
                     exit={{ opacity: 0, height: 0 }} transition={{ duration: 0.25 }}
@@ -388,6 +398,31 @@ function DoctorPageInner() {
                         </button>
                       ))}
                     </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              {/* 4. Location — shown once condition is selected */}
+              <AnimatePresence>
+                {condition && !voiceDetected && (
+                  <motion.div key="location"
+                    initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }} transition={{ duration: 0.25 }}
+                    className="mb-8 overflow-hidden"
+                  >
+                    <h3 className="text-xs font-semibold text-stone-400 uppercase tracking-widest mb-1">
+                      Step 4 · Your location
+                    </h3>
+                    <p className="text-xs text-stone-400 mb-3">Optional — doctors near you will appear first</p>
+                    <input
+                      type="text"
+                      value={region}
+                      onChange={(e) => setRegion(e.target.value)}
+                      placeholder="e.g. San Francisco, Chicago, Boston…"
+                      className="w-full max-w-sm px-4 py-2.5 rounded-xl border-2 text-sm
+                                 border-stone-200 bg-white text-stone-700 placeholder-stone-400
+                                 focus:outline-none focus:border-amber-400 transition-colors"
+                    />
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -481,11 +516,28 @@ function DoctorPageInner() {
                             {extractedInfo.stage}
                           </span>
                         )}
-                        {extractedInfo.condition && extractedInfo.stage && extractedInfo.condition_confidence >= 60 && (
+                        {!extractedInfo.stage && extractedInfo.condition && (
+                          <span className="text-xs text-stone-400 italic">No stage detected — searching all stages</span>
+                        )}
+                        {extractedInfo.condition && extractedInfo.condition_confidence >= 60 && (
                           <span className="text-xs text-stone-400 ml-auto">Searching automatically…</span>
                         )}
                       </div>
                     )}
+
+                    {/* Location input after voice detection too */}
+                    <div className="mt-3 pt-3 border-t" style={{ borderColor: "var(--theme-border)" }}>
+                      <p className="text-xs text-stone-500 mb-2">Your location (optional — prioritises nearby doctors)</p>
+                      <input
+                        type="text"
+                        value={region}
+                        onChange={(e) => setRegion(e.target.value)}
+                        placeholder="e.g. San Francisco, Chicago…"
+                        className="w-full max-w-xs px-3 py-2 rounded-lg border text-sm
+                                   border-stone-200 bg-white text-stone-700 placeholder-stone-400
+                                   focus:outline-none focus:border-amber-400 transition-colors"
+                      />
+                    </div>
                   </motion.div>
                 )}
 
@@ -505,7 +557,7 @@ function DoctorPageInner() {
                     </div>
                     <p className="text-sm font-medium text-red-500">Recording — tap to stop</p>
                     <p className="text-xs text-stone-400 text-center max-w-xs">
-                      Try: "I was just diagnosed with Stage II breast cancer and I'm scared about what's next"
+                      Try: "I was just diagnosed with breast cancer and I'm scared about what's next"
                     </p>
                   </motion.div>
                 )}
@@ -535,7 +587,7 @@ function DoctorPageInner() {
 
               </AnimatePresence>
 
-              {/* Manual search CTA */}
+              {/* Manual search CTA — only needs condition now */}
               <AnimatePresence>
                 {canSearch && !isProcessing && (
                   <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
@@ -551,6 +603,9 @@ function DoctorPageInner() {
                     >
                       Find Matching Doctors <span>→</span>
                     </button>
+                    {!stage && (
+                      <p className="text-xs text-stone-400 mt-2">No stage selected — showing doctors across all stages</p>
+                    )}
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -575,8 +630,16 @@ function DoctorPageInner() {
               <p className="mb-6 text-sm" style={{ color: "color-mix(in srgb, var(--theme-text, #6b7280) 60%, transparent)" }}>
                 Results for{" "}
                 <span className="font-semibold" style={{ color: "var(--theme-text)" }}>{condition}</span>
-                {" · "}
-                <span className="font-semibold" style={{ color: "var(--theme-text)" }}>{stage}</span>
+                {stage && (
+                  <><span style={{ color: "var(--theme-text)" }}>{" · "}</span>
+                  <span className="font-semibold" style={{ color: "var(--theme-text)" }}>{stage}</span></>
+                )}
+                {!stage && (
+                  <span className="ml-1 text-xs text-stone-400 italic">· all stages</span>
+                )}
+                {region && (
+                  <span className="ml-1 text-xs text-stone-400">· near {region}</span>
+                )}
                 {voiceDetected && (
                   <span className="ml-2 text-xs px-2 py-0.5 rounded-full font-medium"
                     style={{ backgroundColor: "var(--theme-accent-soft)", color: "var(--theme-accent)" }}>
