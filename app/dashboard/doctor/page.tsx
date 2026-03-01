@@ -13,6 +13,7 @@ import {
   EMOTION_CSS_VARS,
 } from "@/lib/emotionTheme"
 import type { Doctor } from "@/lib/mockData"
+import { ConsensusPanel } from "@/components/ConsensusPanel"
 
 // ── Condition / Stage Data ────────────────────────────────────────────────────
 
@@ -150,6 +151,7 @@ function DoctorPageInner() {
   const [isLoading, setIsLoading]   = useState(false)
   const [error, setError]           = useState<string | null>(null)
   const [ragSummary, setRagSummary] = useState<any>(null)
+  const [rawExperiences, setRawExperiences] = useState<any[]>([])
 
   const { isRecording, audioBlob, micError, start, stop } = useVoiceRecorder()
   const { speak, isPlaying: ttsPlaying, isLoading: ttsLoading, ttsError } = useTTS()
@@ -280,6 +282,7 @@ function DoctorPageInner() {
         }))
       )
       setRagSummary(data.rag_summary ?? null)
+      setRawExperiences(data.retrieved_experiences ?? [])
     } catch (err: any) {
       setError(err.message)
     } finally {
@@ -291,6 +294,7 @@ function DoctorPageInner() {
     setStep("select"); setCondition(""); setStage(""); setEsi("calm"); setRegion("")
     setEmotion("neutral"); setDoctors([]); setRagSummary(null); setError(null)
     setTranscript(""); setVoiceDetected(false); setExtractedInfo(null)
+    setRawExperiences([])
   }
 
   const stages    = condition ? CONDITIONS[condition]?.stages ?? [] : []
@@ -733,6 +737,36 @@ function DoctorPageInner() {
                   : doctors.map((doctor, i) => <DoctorCard key={doctor.id} doctor={doctor} index={i} />)
                 }
               </div>
+
+              {/* ── Specialist Consensus ── */}
+              {!isLoading && doctors.length > 0 && (
+                <motion.div
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4 }}
+                  className="mt-8"
+                >
+                  <h3 className="text-xs font-semibold text-stone-400 uppercase tracking-widest mb-4">
+                    ⚖️ Specialist Consensus · Powered by Modal
+                  </h3>
+                  <ConsensusPanel
+                    condition={condition}
+                    stage={stage}
+                    experiences={rawExperiences}
+                    doctors={doctors.map(d => ({
+                      doctor_id:             d.id,
+                      doctor_name:           d.name,
+                      doctor_specialty:      d.specialty,
+                      doctor_hospital:       d.hospital,
+                      composite_score:       d.matchScore / 100,
+                      avg_outcome_score:     0,
+                      avg_sentiment_score:   0,
+                      supporting_experiences: d.patientCount,
+                    }))}
+                    esiCategory={esi}
+                  />
+                </motion.div>
+              )}
             </motion.div>
           )}
 

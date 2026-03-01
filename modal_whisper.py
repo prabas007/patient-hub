@@ -19,9 +19,10 @@ image = (
 @app.function(image=image, gpu="T4", timeout=120)
 @modal.fastapi_endpoint(method="POST", label="transcribe-form")
 async def transcribe_form(request: Request) -> dict:
-    import  whisper
+    import whisper
     import tempfile
     import os
+    import subprocess
 
     form = await request.form()
     audio_file = form.get("audio")
@@ -31,26 +32,39 @@ async def transcribe_form(request: Request) -> dict:
 
     audio_bytes = await audio_file.read()
 
-    content_type = getattr(audio_file, "content_type", "audio/webm")
-    ext_map = {
-        "audio/webm":  ".webm",
-        "audio/wav":   ".wav",
-        "audio/mp3":   ".mp3",
-        "audio/mpeg":  ".mp3",
-        "audio/ogg":   ".ogg",
-        "audio/mp4":   ".mp4",
-    }
-    ext = ext_map.get(content_type, ".webm")
+    if not audio_bytes:
+        return {"error": "Empty audio data"}
 
     model = whisper.load_model("base")
 
-    with tempfile.NamedTemporaryFile(suffix=ext, delete=False) as tmp:
-        tmp.write(audio_bytes)
-        tmp_path = tmp.name
+    # Write raw upload to a temp file
+    with tempfile.NamedTemporaryFile(suffix=".webm", delete=False) as tmp_in:
+        tmp_in.write(audio_bytes)
+        tmp_in_path = tmp_in.name
+
+    # Re-mux to wav via ffmpeg — fixes Chrome MediaRecorder's malformed webm headers
+    tmp_out_path = tmp_in_path.replace(".webm", ".wav")
+    try:
+        subprocess.run(
+            [
+                "ffmpeg", "-y",           # overwrite output
+                "-i", tmp_in_path,        # input (possibly malformed webm)
+                "-ar", "16000",           # 16kHz sample rate for Whisper
+                "-ac", "1",               # mono
+                "-f", "wav",              # force wav output
+                tmp_out_path,
+            ],
+            capture_output=True,
+            check=True,
+        )
+        transcribe_path = tmp_out_path
+    except subprocess.CalledProcessError:
+        # ffmpeg re-mux failed — try passing original directly as fallback
+        transcribe_path = tmp_in_path
 
     try:
         result = model.transcribe(
-            tmp_path,
+            transcribe_path,
             language=None,
             task="transcribe",
             fp16=True,
@@ -63,5 +77,11 @@ async def transcribe_form(request: Request) -> dict:
                 sum(s["end"] - s["start"] for s in result.get("segments", [])), 2
             ),
         }
+    except Exception as e:
+        return {"error": f"Transcription failed: {str(e)}", "transcript": ""}
     finally:
-        os.unlink(tmp_path)
+        for path in [tmp_in_path, tmp_out_path]:
+            try:
+                os.unlink(path)
+            except Exception:
+                pass
