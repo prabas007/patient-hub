@@ -34,6 +34,7 @@ CareLink helps patients navigate serious medical diagnoses by surfacing real pat
 | Embeddings | Google Gemini `gemini-embedding-001` |
 | AI / LLM | Google Gemini `gemini-2.5-flash-lite` (consensus engine) |
 | Speech-to-text | OpenAI Whisper (base model, GPU-accelerated via Modal) |
+| Text-to-speech | ElevenLabs (`eleven_turbo_v2`, streamed audio/mpeg) |
 | Serverless GPU | Modal (T4 GPU for Whisper; CPU for consensus) |
 | REST Bridge | FastAPI + uvicorn (Python ↔ VectorAI gRPC adapter) |
 | Containerization | Docker Compose (VectorAI DB) |
@@ -45,9 +46,9 @@ CareLink helps patients navigate serious medical diagnoses by surfacing real pat
 - **Semantic Doctor Recommendations** — Patients describe their condition in natural language or by voice; the system retrieves the most similar patient experiences from VectorAI and surfaces ranked doctor recommendations using a composite score (similarity × outcome × sentiment).
 - **Multi-Agent Consensus Engine** — Three AI specialist personas (Clinical Specialist, Patient Advocate, Data Scientist) independently analyze the same data in parallel via `asyncio.gather`, then vote to produce a consensus recommendation with a confidence score.
 - **Voice Input via Whisper** — Patients can speak their query; audio is recorded as WebM, re-muxed to WAV via ffmpeg, and transcribed by Whisper on a Modal T4 GPU.
+- **Text-to-Speech via ElevenLabs** — AI-generated recommendation summaries are read aloud to patients using ElevenLabs' `eleven_turbo_v2` model, streamed directly as audio/mpeg for low latency.
 - **Emotional State Awareness** — The consensus engine accepts an `esi_category` (emotional state indicator) to tailor recommendations to how the patient is feeling.
 - **Community Circles** — A vector collection for condition-specific community posts, searchable by semantic similarity.
-- **Presage Adaptive UI** — An `emotional_states` collection is reserved for future adaptive UI personalization based on arousal/valence embeddings.
 
 ---
 
@@ -176,7 +177,18 @@ npm run dev
 
 ---
 
-## REST Bridge API
+## Next.js API Routes
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `POST` | `/api/transcribe` | Proxies browser audio to Modal Whisper; returns transcript + language |
+| `POST` | `/api/voice-extract` | Extracts condition, stage, and emotional tone from a Whisper transcript via Gemini |
+| `POST` | `/api/recommend` | Full RAG pipeline: embed → VectorAI retrieval → doctor aggregation → Gemini summary |
+| `POST` | `/api/extract` | Extracts structured outcome data from a free-text patient experience |
+| `POST` | `/api/tts` | Converts text to speech via ElevenLabs and streams audio/mpeg back to the client |
+| `POST` | `/api/chat-guardrail` | Moderates community chat messages; blocks specific medical advice using Gemini |
+
+---
 
 The bridge (`06_rest_bridge.py`) exposes VectorAI's gRPC interface over HTTP so the Next.js app can call it directly.
 
@@ -239,9 +251,13 @@ The bridge (`06_rest_bridge.py`) exposes VectorAI's gRPC interface over HTTP so 
 
 | Variable | Default | Description |
 |---|---|---|
-| `GEMINI_API_KEY` | — | Required for embeddings and consensus engine |
+| `GEMINI_API_KEY` | — | Required for embeddings, RAG generation, and voice extraction |
+| `GEMINI_CHAT_API_KEY` | — | Gemini key used by the chat guardrail moderator |
 | `VECTORAI_HOST` | `localhost:50051` | Actian VectorAI gRPC address |
+| `VECTORAI_BRIDGE_URL` | `http://localhost:8080` | REST bridge URL for Next.js to query VectorAI |
 | `BRIDGE_PORT` | `8080` | REST bridge HTTP port |
+| `MODAL_WHISPER_URL` | — | Deployed Modal endpoint URL for Whisper transcription |
+| `ELEVENLABS_API_KEY` | — | Required for text-to-speech via ElevenLabs |
 
 ---
 
