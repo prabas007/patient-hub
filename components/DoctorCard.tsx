@@ -20,11 +20,11 @@ export function DoctorCard({ doctor, index = 0 }: DoctorCardProps) {
       <Link href={`/dashboard/doctor/${doctor.id}?name=${encodeURIComponent(doctor.name)}&specialty=${encodeURIComponent(doctor.specialty)}&hospital=${encodeURIComponent(doctor.hospital)}&matchScore=${doctor.matchScore}&patientCount=${doctor.patientCount}`}>
         <div className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl
                         transition-all duration-200 cursor-pointer group
-                        border border-transparent hover:border-amber-100">
+                        border border-transparent hover:border-violet-100">
           {/* Header */}
           <div className="flex items-start justify-between mb-3">
             <div>
-              <h3 className="font-semibold text-lg text-stone-900 group-hover:text-amber-700 transition-colors">
+              <h3 className="font-semibold text-lg text-stone-900 group-hover:text-violet-700 transition-colors">
                 {doctor.name}
               </h3>
               <p className="text-sm text-stone-500">

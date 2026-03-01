@@ -13,12 +13,12 @@ export default function ResourcesPage() {
 
       {/* Guidelines Card */}
       <Link href="/dashboard/resources/guidelines">
-        <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-6 shadow-sm hover:shadow-md transition cursor-pointer">
-          <h3 className="text-lg font-semibold text-yellow-800 mb-2">
+        <div className="bg-[#ede8f7] border border-[#c5bde0] rounded-xl p-6 shadow-sm hover:shadow-md transition cursor-pointer">
+          <h3 className="text-lg font-semibold text-[#3a3030] mb-2">
             Guidelines & Responsible Use
           </h3>
-          <p className="text-sm text-yellow-700">
-            Learn how to use LINK-CARE safely and responsibly.
+          <p className="text-sm text-[#5c3d9e]">
+            Learn how to use LinkCare safely and responsibly.
           </p>
         </div>
       </Link>

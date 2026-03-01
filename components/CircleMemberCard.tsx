@@ -3,10 +3,10 @@
 import type { CircleMember } from "@/lib/mockData"
 
 const AVATAR_COLORS = [
-  "bg-amber-500",
+  "bg-orange-400",
   "bg-purple-500",
   "bg-green-500",
-  "bg-amber-500",
+  "bg-orange-400",
   "bg-pink-500",
   "bg-teal-500",
 ]
@@ -43,7 +43,7 @@ export function CircleMemberCard({
         <p className="font-semibold text-stone-900 text-sm truncate">{member.name}</p>
         <p className="text-xs text-stone-500 truncate">{member.condition}</p>
         <div className="flex items-center gap-2 mt-1">
-          <span className="text-xs bg-amber-50 text-amber-700 px-2 py-0.5 rounded-full">
+          <span className="text-xs bg-[#ede8f7] text-[#5c3d9e] px-2 py-0.5 rounded-full">
             {member.stage}
           </span>
           <span className="text-xs text-stone-400">{member.joinedDaysAgo}d ago</span>
@@ -60,7 +60,7 @@ export function CircleMemberCard({
             ${
               requestSent
                 ? "bg-green-100 text-green-600 cursor-default"
-                : "bg-stone-100 text-stone-400 hover:bg-amber-100 hover:text-amber-700"
+                : "bg-stone-100 text-stone-400 hover:bg-[#ede8f7] hover:text-[#5c3d9e]"
             }`}
         >
           {requestSent ? (

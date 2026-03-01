@@ -15,13 +15,13 @@ export function DashboardShell({ children }: { children: ReactNode }) {
   const pathname = usePathname()
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-slate-50 to-slate-100 flex flex-col">
+    <div className="min-h-screen bg-gradient-to-br from-[#e8e6e6] via-[#e2e0e0] to-[#d8d5d5] flex flex-col">
       {/* ── Header ─────────────────────────────────────────────────────── */}
-      <header className="bg-white border-b border-amber-100 shadow-sm sticky top-0 z-10">
+      <header className="bg-white border-b border-[#b0aeae]/60 shadow-sm sticky top-0 z-10">
         <div className="max-w-6xl mx-auto px-8 py-5 flex justify-between items-center">
           <Link href="/dashboard/circle">
-            <h1 className="text-2xl font-bold text-stone-900 tracking-tight cursor-pointer hover:text-amber-700 transition-colors">
-              LinkCare
+            <h1 className="text-2xl font-bold tracking-tight cursor-pointer transition-opacity hover:opacity-80">
+              <span className="text-[#3a3030]">Link</span><span className="text-[#2233cc]">Care</span>
             </h1>
           </Link>
 
@@ -35,8 +35,8 @@ export function DashboardShell({ children }: { children: ReactNode }) {
                   href={tab.href}
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-all
                     ${isActive
-                      ? "bg-amber-600 text-white shadow-md"
-                      : "text-stone-600 hover:bg-stone-200"
+                      ? "bg-[#2233cc] text-white shadow-sm"
+                      : "text-[#625e5e] hover:text-[#3a3030] hover:bg-[#d5d3d3]"
                     }`}
                 >
                   {tab.name}
@@ -49,7 +49,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
 
       {/* ── Main Content ───────────────────────────────────────────────── */}
       <main className="max-w-6xl mx-auto px-10 py-10 w-full flex-1">
-        <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-sm border border-slate-200/60 p-10">
+        <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-sm border border-[#b0aeae]/40 p-10">
           {children}
         </div>
       </main>
@@ -62,7 +62,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
           </p>
           <Link
             href="/dashboard/resources/guidelines"
-            className="text-amber-700 hover:underline text-sm"
+            className="text-[#5c3d9e] hover:underline text-sm"
           >
             Guidelines & Responsible Use →
           </Link>

@@ -81,7 +81,7 @@ export default function ChatPage() {
             onClick={() => setMode("circle")}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
               mode === "circle"
-                ? "bg-white text-amber-700 shadow-sm"
+                ? "bg-white text-[#5c3d9e] shadow-sm"
                 : "text-stone-500 hover:text-stone-700"
             }`}
           >
@@ -91,7 +91,7 @@ export default function ChatPage() {
             onClick={() => setMode("personal")}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
               mode === "personal"
-                ? "bg-white text-amber-700 shadow-sm"
+                ? "bg-white text-[#5c3d9e] shadow-sm"
                 : "text-stone-500 hover:text-stone-700"
             }`}
           >
@@ -128,7 +128,7 @@ export default function ChatPage() {
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   placeholder="Search conversations..."
-                  className="w-full pl-9 pr-3 py-2 text-sm border border-stone-200 rounded-xl bg-stone-50 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent focus:bg-white transition-colors"
+                  className="w-full pl-9 pr-3 py-2 text-sm text-[#1a1818] border border-stone-200 rounded-xl bg-stone-50 focus:outline-none focus:ring-2 focus:ring-[#5c3d9e] focus:border-transparent focus:bg-white transition-colors"
                 />
               </div>
             </div>
@@ -141,10 +141,10 @@ export default function ChatPage() {
                     key={conv.id}
                     onClick={() => setActiveConvId(conv.id)}
                     className={`w-full p-3 text-left flex items-center gap-3 hover:bg-stone-50 transition-colors ${
-                      activeConvId === conv.id ? "bg-amber-50" : ""
+                      activeConvId === conv.id ? "bg-[#ede8f7]" : ""
                     }`}
                   >
-                    <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center text-amber-700 font-bold text-sm shrink-0">
+                    <div className="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center text-orange-700 font-bold text-sm shrink-0">
                       {conv.friendInitials}
                     </div>
                     <div className="min-w-0">
@@ -173,7 +173,7 @@ export default function ChatPage() {
               <>
                 {/* Conversation header */}
                 <div className="px-4 py-3 border-b border-stone-100 bg-white flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-full bg-amber-100 flex items-center justify-center text-amber-700 font-bold text-sm">
+                  <div className="w-9 h-9 rounded-full bg-orange-100 flex items-center justify-center text-orange-700 font-bold text-sm">
                     {activeConv.friendInitials}
                   </div>
                   <div>
@@ -209,7 +209,7 @@ export default function ChatPage() {
                             <div
                               className={`px-4 py-2.5 rounded-2xl text-sm leading-relaxed ${
                                 isMe
-                                  ? "bg-amber-600 text-white rounded-br-sm"
+                                  ? "bg-[#5c3d9e] text-white rounded-br-sm"
                                   : "bg-white border border-stone-200 text-stone-700 rounded-bl-sm shadow-sm"
                               }`}
                             >
@@ -239,12 +239,12 @@ export default function ChatPage() {
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     placeholder="Send a message..."
-                    className="flex-1 border border-stone-200 rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                    className="flex-1 border border-stone-200 rounded-xl px-4 py-2 text-sm text-[#1a1818] focus:outline-none focus:ring-2 focus:ring-[#5c3d9e] focus:border-transparent"
                   />
                   <button
                     type="submit"
                     disabled={!input.trim()}
-                    className="px-4 py-2 bg-amber-600 text-white rounded-xl text-sm font-medium hover:bg-amber-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                    className="px-4 py-2 bg-[#5c3d9e] text-white rounded-xl text-sm font-medium hover:bg-[#4a3282] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                   >
                     Send
                   </button>
